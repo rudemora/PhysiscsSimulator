@@ -1,25 +1,30 @@
 package simulator.model;
 //Todo esta importado por mi
+
+// ACELERACIÓN, POSICIÓN , VELOCIDAD
 import simulator.misc.Vector2D;
 import org.json.*;
 public abstract class Body {
-	String id;
-	String gId;
-	Vector2D velocity;
-	Vector2D fuerza;
-	Vector2D position;
+	protected String id;
+	protected String gId;
+	protected Vector2D velocity;
+	protected Vector2D fuerza;
+	protected Vector2D position;
 	double masa;
 	//@Override
-	public Body(String i,Vector2D v,Vector2D p, double m) {//hacer try catch y lanzar IllegalArgumentExeption
-		  assert(i!=null && i.trim().length()>0);
-		  assert (v!=null&&p!=null);
-		  assert (m>0);
-		  id=i;
-		  fuerza= new Vector2D();
-		  position=p;
-		  masa=m;
-		  //no se q hacer con gId
+	public Body(String i, String id, Vector2D v,Vector2D p, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
+		  if ((i!= null && i.trim().length()>0) || (v!= null && p!= null) || (m>0)) { // es null o equals (?)
+			  id=i;
+			  fuerza= new Vector2D();
+			  position=p;
+			  masa=m;
+			  gId =id;
+		  }
+		  else {
+			  throw new IllegalArgumentException(); 
+		  }
 	}
+	
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -35,6 +40,7 @@ public abstract class Body {
 		}	
 		return true;
 	}
+	
 	public String getId() {
 		return id;
 	}

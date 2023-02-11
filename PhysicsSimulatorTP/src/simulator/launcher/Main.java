@@ -91,9 +91,20 @@ public class Main {
 		cmdLineOptions.addOption(Option.builder("fl").longOpt("force-laws").hasArg()
 				.desc("Force laws to be used in the simulator. Possible values: "
 						+ factoryPossibleValues(_forceLawsFactory) + ". Default value: '" + _forceLawsDefaultValue
-						+ "'.")
+						+ ".")
 				.build());
-
+		
+		//output
+		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg()
+				.desc("Output file, where output is written. Default value:  the standard output"
+						+ ".")
+				.build());
+		
+		//output
+	    cmdLineOptions.addOption(Option.builder("s").longOpt("steps").hasArg()
+				.desc("An integer representing the number of simulation steps. Default value: " + _stepsDefaultValue
+						+ ".")
+				.build());
 		return cmdLineOptions;
 	}
 
