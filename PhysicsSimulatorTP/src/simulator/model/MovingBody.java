@@ -11,12 +11,19 @@ public class MovingBody extends Body {
 	@Override
 	void advance(double t) {
 		// TODO Auto-generated method stub
-		
-		Vector2D aceleration = fuerza.scale(1/masa);
+		Vector2D aceleration;
+		if (masa == 0) {
+			aceleration = new Vector2D(0,0);
+		}
+		else {
+			aceleration = fuerza.scale(1/masa);
+		}
 		position = position.plus(velocity.scale(t));
 		position = position.plus(aceleration.scale(1/2*(t*t)));
+		velocity = velocity.plus(aceleration.scale(t));
 	}
-	void changePosition() {
+	
+	void changePosition() { // esto por qué está aquí? creo que no hace falta
 		
 	}
 }

@@ -12,13 +12,14 @@ public abstract class Body {
 	protected Vector2D position;
 	double masa;
 	//@Override
-	public Body(String i, String id, Vector2D v,Vector2D p, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
+	public Body(String i, String gi, Vector2D v,Vector2D p, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
 		  if ((i!= null && i.trim().length()>0) || (v!= null && p!= null) || (m>0)) { // es null o equals (?)
 			  id=i;
 			  fuerza= new Vector2D();
-			  position=p;
+			  velocity = p;
+			  position=v;
 			  masa=m;
-			  gId =id;
+			  gId =gi;
 		  }
 		  else {
 			  throw new IllegalArgumentException(); 

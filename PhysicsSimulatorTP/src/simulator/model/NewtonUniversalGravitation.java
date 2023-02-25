@@ -9,7 +9,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	private double G;
 	
 	NewtonUniversalGravitation (double g) throws IllegalArgumentException {
-		if (G >= 0) {
+		if (g > 0) {
 			G = g;
 		}
 		else {
@@ -20,6 +20,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	@Override
 	public void apply(List<Body> bs) {
 		// TODO Auto-generated method stub
+		
 		for (int i = 0; i < bs.size(); i++) {
 			double force = 0;
 			if (bs.get(i).getMass() != 0) {
@@ -27,13 +28,14 @@ public class NewtonUniversalGravitation implements ForceLaws {
 					if (i!=j) {
 						double magnitude = bs.get(j).getPosition().minus(bs.get(i).getPosition()).magnitude();
 						if (magnitude != 0) {
-							force = (G*bs.get(i).getMass()*bs.get(j).getMass()) / (magnitude);
+							force = (G*bs.get(i).getMass()*bs.get(j).getMass()) / ((magnitude)*magnitude);
 							bs.get(i).addForce(bs.get(j).getPosition().minus(bs.get(i).getPosition()).scale(force));
 						}
 					}
 				}				
-			
-			//force = G*bs.get(i).getMass()*force; // este factor común funciona
+			}
+			else {
+				bs.get(i).advance(0);
 			}
 		}
 	}
