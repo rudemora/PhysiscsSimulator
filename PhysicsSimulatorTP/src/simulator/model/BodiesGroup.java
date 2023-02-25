@@ -11,12 +11,19 @@ public class BodiesGroup {
 	private List<Body> bodyList;
 	
 	public BodiesGroup (String i, ForceLaws law) throws IllegalArgumentException {
-		if (i == null || law == null || i.trim().length() > 0) {
-			throw new IllegalArgumentException();
+		if (i == "") {
+			throw new IllegalArgumentException("Id cannot be empty");
+		}
+		if (i == "  ") {
+			throw new IllegalArgumentException("Id must have at least one char that is not white space");
+		}
+		if (law == null) {
+			throw new IllegalArgumentException("Force laws cannot be null");
 		}
 		else {
 			id = i;
 			laws = law;
+			bodyList = new ArrayList<Body>(); 
 		}
 	}
 	
@@ -40,7 +47,7 @@ public class BodiesGroup {
 		else {
 			for(int i = 0; i < bodyList.size(); i++) {
 				if (bodyList.get(i).getId() == b.getId()) {
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("Bodies in a group must have different ids");
 				}
 			}
 			bodyList.add(b);
