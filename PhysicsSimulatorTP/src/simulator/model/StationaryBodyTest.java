@@ -40,6 +40,7 @@ class StationaryBodyTest {
 		// check getState
 		JSONObject bs1 = new JSONObject("{\"p\":[2,2],\"v\":[0,0],\"f\":[6,5],\"id\":\"earth\",\"m\":10}\n");
 		JSONObject bs2 = new JSONObject(b.getState().toString());
+		
 		assertTrue("StationaryBody.getState retuned a wrong value", bs1.similar(bs2));
 
 		// check resetForce

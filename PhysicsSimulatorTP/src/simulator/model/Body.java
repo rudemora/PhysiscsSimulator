@@ -12,18 +12,18 @@ public abstract class Body {
 	protected Vector2D position;
 	double masa;
 	//@Override
-	public Body(String i, String gi, Vector2D v,Vector2D p, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
-		  if ((i!= null && i.trim().length()>0) || (v!= null && p!= null) || (m>0)) { // es null o equals (?)
-			  id=i;
-			  fuerza= new Vector2D();
-			  velocity = p;
-			  position=v;
-			  masa=m;
-			  gId =gi;
-		  }
-		  else {
-			  throw new IllegalArgumentException(); 
-		  }
+	public Body(String i, String gi, Vector2D p, Vector2D v, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
+		if (i == "" ||i == null || i.trim().length() <= 0 || gi == "" || gi == null || gi.trim().length()<= 0 || p == null || m <= 0) {
+			throw new IllegalArgumentException("Id cannot be empty");
+		}
+		else {
+			id=i;
+			fuerza= new Vector2D();
+			velocity = v;
+			position=p;
+			masa=m;
+			gId =gi;
+		}
 	}
 	
 	public boolean equals(Object obj) {
@@ -69,11 +69,11 @@ public abstract class Body {
 	abstract void advance(double t);
 	public JSONObject getState() {
 		JSONObject jo1 = new JSONObject();
-		jo1.put("id", id);
-		jo1.put("m", masa);
 		jo1.put("p", position);
 		jo1.put("v", velocity);
 		jo1.put("f", fuerza);
+		jo1.put("id", id);		
+		jo1.put("m", masa);
 		return jo1;
 	}
 	public String toString() {

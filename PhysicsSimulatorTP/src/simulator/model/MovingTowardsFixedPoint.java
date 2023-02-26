@@ -19,10 +19,10 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	
 	@Override
 	public void apply(List<Body> bs) {
-		for(int i = 0; i < bs.size(); i++) {
+		/*for(int i = 0; i < bs.size(); i++) {
 			bs.get(i).addForce((vectorC.minus(bs.get(i).getPosition()).scale(bs.get(i).getMass()*acelerationG)));
 		}
-		
+		*/
 	}
 
 	public String toString() {

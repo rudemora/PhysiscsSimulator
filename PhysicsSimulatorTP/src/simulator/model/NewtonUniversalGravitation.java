@@ -8,6 +8,10 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	
 	private double G;
 	
+	NewtonUniversalGravitation(){
+		G = 6.67E-11;
+	}
+	
 	NewtonUniversalGravitation (double g) throws IllegalArgumentException {
 		if (g > 0) {
 			G = g;
@@ -21,7 +25,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	public void apply(List<Body> bs) {
 		// TODO Auto-generated method stub
 		
-		for (int i = 0; i < bs.size(); i++) {
+		/*for (int i = 0; i < bs.size(); i++) {
 			double force = 0;
 			if (bs.get(i).getMass() != 0) {
 				for(int j = 0; j < bs.size(); j++) {
@@ -34,8 +38,17 @@ public class NewtonUniversalGravitation implements ForceLaws {
 					}
 				}				
 			}
-			else {
-				bs.get(i).advance(0);
+			
+		}*/
+		double force = 0;
+		double distance = 0;
+		for(Body b1:bs) {
+			for(Body b2:bs) {
+				if (!b2.getPosition().equals(b1.getPosition())) {
+					distance = b1.getPosition().distanceTo(b2.getPosition());
+					force = G*b1.getMass()*b2.getMass() / (distance*distance);
+					b1.addForce(b2.getPosition().minus(b1.getPosition()).direction().scale(force));
+				}
 			}
 		}
 	}

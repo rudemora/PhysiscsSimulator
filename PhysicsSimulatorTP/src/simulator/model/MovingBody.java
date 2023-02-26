@@ -3,8 +3,8 @@ package simulator.model;
 import simulator.misc.Vector2D;
 
 public class MovingBody extends Body {
-	public MovingBody(String id, String gId, Vector2D v,Vector2D p, double m) {
-		super(id, gId, v,p,m);
+	public MovingBody(String id, String gId, Vector2D p, Vector2D v,double m) {
+		super(id, gId, p,v,m);
 		//aqui habria q hacer try catch tb supongo
 	}
 
@@ -18,8 +18,7 @@ public class MovingBody extends Body {
 		else {
 			aceleration = fuerza.scale(1/masa);
 		}
-		position = position.plus(velocity.scale(t));
-		position = position.plus(aceleration.scale(1/2*(t*t)));
+		position = position.plus(velocity.scale(t).plus(aceleration.scale(0.5*(t*t))));
 		velocity = velocity.plus(aceleration.scale(t));
 	}
 	

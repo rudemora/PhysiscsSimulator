@@ -69,10 +69,11 @@ public class BodiesGroup {
 	
 	public JSONObject getState() {
 		JSONObject json = new JSONObject();
-		json.put("id", id);
 		for(int i = 0; i < bodyList.size(); i++) {
-			json.accumulate("bodies", bodyList.get(i).getState());
+			JSONObject repr = bodyList.get(i).getState();
+			json.accumulate("bodies", repr);
 		}
+		json.put("id", id);
 		return json;
 	}
 	
