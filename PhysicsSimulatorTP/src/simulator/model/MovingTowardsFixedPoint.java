@@ -10,7 +10,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	private double acelerationG;
 	
 	MovingTowardsFixedPoint (Vector2D c, double g) throws IllegalArgumentException {
-		if (c.equals(null) || g < 0) {
+		if (c == null || g <= 0) {
 			throw new IllegalArgumentException(); 
 		}
 		vectorC = c;
@@ -19,10 +19,10 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	
 	@Override
 	public void apply(List<Body> bs) {
-		/*for(int i = 0; i < bs.size(); i++) {
-			bs.get(i).addForce((vectorC.minus(bs.get(i).getPosition()).scale(bs.get(i).getMass()*acelerationG)));
+		for (Body b : bs) {
+			b.addForce((vectorC.minus(b.getPosition()).direction().scale((b.getMass()*acelerationG))));
 		}
-		*/
+		
 	}
 
 	public String toString() {

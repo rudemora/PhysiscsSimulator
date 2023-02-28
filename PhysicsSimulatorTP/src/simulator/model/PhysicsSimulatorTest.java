@@ -11,7 +11,7 @@ import simulator.misc.Vector2D;
 
 class PhysicsSimulatorTest {
 
-/*
+
 	@Test
 	void basic_behaviour() {
 		Body b1 = new MovingBody("earth", "milkyway", new Vector2D(2.0, 2.0), new Vector2D(3.4, 1.2), 10.0);
@@ -24,7 +24,7 @@ class PhysicsSimulatorTest {
 		Body b7 = new MovingBody("B09", "Andromeda", new Vector2D(1.0, 3.0), new Vector2D(3.4, 1.2), 30.0);
 		Body b8 = new MovingBody("B11", "Andromeda", new Vector2D(4.0, 9.0), new Vector2D(3.4, 1.2), 40.0);
 
-		PhysicsSimulator fs = //new PhysicsSimulator(new NewtonUniversalGravitation(10), 2.0);
+		PhysicsSimulator fs = new PhysicsSimulator(new NewtonUniversalGravitation(10), 2.0);
 
 		fs.addGroup("milkyway");
 		fs.addGroup("Andromeda");
@@ -212,6 +212,6 @@ class PhysicsSimulatorTest {
 		assertThrowsExactly(IllegalArgumentException.class,
 				() -> fs.addBody(new MovingBody("B10", "Andromeda", new Vector2D(2.0, 2.0), new Vector2D(3.4, 1.2), 10.0)), "Group must exists");
 
-	}*/
+	}
 
 }

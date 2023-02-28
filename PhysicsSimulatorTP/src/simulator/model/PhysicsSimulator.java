@@ -1,9 +1,12 @@
 package simulator.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
+
 
 public class PhysicsSimulator {
 
@@ -12,14 +15,16 @@ public class PhysicsSimulator {
 	private Map<String, BodiesGroup> map;
 	private double actualTime;
 	private ArrayList<String> idList;
-	PhysicsSimulator(double time, ForceLaws object) throws IllegalArgumentException {
-		if (dt <= 0 || object == null) {
+	PhysicsSimulator(ForceLaws object, double time) throws IllegalArgumentException {
+		if (time <= 0 || object == null) {
 			throw new IllegalArgumentException();
 		}
 		else {
-			time = dt;
+			dt = time;
 			laws = object;
 			actualTime = 0.0;
+			map = new HashMap<String, BodiesGroup>();
+			idList = new ArrayList<String>();
 		}
 	}
 	
@@ -42,8 +47,8 @@ public class PhysicsSimulator {
 	}
 	
 	public void addBody(Body b) throws IllegalArgumentException {
-		if (map.containsKey(b.getId())) {
-			map.get(b.getId()).addBody(b);
+		if (map.containsKey(b.getgId())) {
+			map.get(b.getgId()).addBody(b);
 		}
 		else {
 			throw new IllegalArgumentException();
@@ -51,7 +56,7 @@ public class PhysicsSimulator {
 	}
 	
 	public void setForceLaws(String id, ForceLaws fl) throws IllegalArgumentException {
-		if (map.containsKey(id)) {
+		if (!map.containsKey(id)) {
 			throw new IllegalArgumentException();
 		}
 		else {

@@ -13,8 +13,8 @@ public abstract class Body {
 	double masa;
 	//@Override
 	public Body(String i, String gi, Vector2D p, Vector2D v, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
-		if (i == "" ||i == null || i.trim().length() <= 0 || gi == "" || gi == null || gi.trim().length()<= 0 || p == null || m <= 0) {
-			throw new IllegalArgumentException("Id cannot be empty");
+		if (i == "" ||i == null || i.trim().length() <= 0 || gi == "" || gi == null || gi.trim().length()<= 0 || p == null || m <= 0 || v == null) {
+			throw new IllegalArgumentException();
 		}
 		else {
 			id=i;
@@ -69,9 +69,9 @@ public abstract class Body {
 	abstract void advance(double t);
 	public JSONObject getState() {
 		JSONObject jo1 = new JSONObject();
-		jo1.put("p", position);
-		jo1.put("v", velocity);
-		jo1.put("f", fuerza);
+		jo1.put("p", position.asJSONArray());
+		jo1.put("v", velocity.asJSONArray());
+		jo1.put("f", fuerza.asJSONArray());
 		jo1.put("id", id);		
 		jo1.put("m", masa);
 		return jo1;
