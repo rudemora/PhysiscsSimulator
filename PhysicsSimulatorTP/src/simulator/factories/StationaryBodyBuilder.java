@@ -10,7 +10,7 @@ import simulator.model.StationaryBody;
 public class StationaryBodyBuilder extends Builder<Body>{
 
 	public StationaryBodyBuilder() {
-		super("st_body","Body");
+		super("st_body","Body");//FALTA COMPROBAR SI EL SEGUNDO ARGUMENTO(DESCRIPCION) ESTA BIEN
 	}
 	
 
