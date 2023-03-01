@@ -8,9 +8,11 @@ import simulator.model.MovingBody;//Importado por mi
 
 public class MovingBodyBuilder extends Builder<Body>{
 
-	public MovingBodyBuilder(String typeTag, String desc) {
-		super(typeTag, desc);
+	public MovingBodyBuilder () {
+		super("mv_body", "Body");
 	}
+	
+	
 
 	@Override
 	protected Body createInstance(JSONObject data) throws IllegalArgumentException{

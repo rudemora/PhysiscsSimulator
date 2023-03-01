@@ -8,9 +8,8 @@ import simulator.model.MovingTowardsFixedPoint;
 
 public class NoForceBuilder extends Builder<ForceLaws> {
 	
-	public NoForceBuilder(String typeTag, String desc) {
-		super(typeTag, desc);
-		// TODO Auto-generated constructor stub
+	public NoForceBuilder() {
+		super("nf", "ForceLaws");
 	}
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {

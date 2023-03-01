@@ -9,10 +9,10 @@ import simulator.model.StationaryBody;
 
 public class StationaryBodyBuilder extends Builder<Body>{
 
-	public StationaryBodyBuilder(String typeTag, String desc) {
-		super(typeTag, desc);
-		// TODO Auto-generated constructor stub
+	public StationaryBodyBuilder() {
+		super("st_body","Body");
 	}
+	
 
 	@Override
 	protected Body createInstance(JSONObject data) {

@@ -9,9 +9,10 @@ import simulator.model.NewtonUniversalGravitation;
 
 public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 
-	public MovingTowardsFixedPointBuilder(String typeTag, String desc) {
-		super(typeTag, desc);
-		// TODO Auto-generated constructor stub
+	
+	
+	public MovingTowardsFixedPointBuilder() {
+		super("mtfp", "ForceLaws");
 	}
 
 	@Override
