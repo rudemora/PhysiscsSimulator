@@ -17,14 +17,17 @@ public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
-		try {
-			double g=data.getDouble("g");
-			Vector2D c=new Vector2D(data.getJSONArray("c").getDouble(0), data.getJSONArray("c").getDouble(1));
-			ForceLaws b=new MovingTowardsFixedPoint(c,g);
-			return b;
-		}catch(Exception e){
-			throw new IllegalArgumentException("OSASUNA NUNCA SE RINDE");
+		double g=9.81;
+		Vector2D c=new Vector2D(0,0);
+		if(data.has("g")) {
+			g=data.getDouble("g");
 		}
+		if(data.has("c")) {
+			c=new Vector2D(data.getJSONArray("c").getDouble(0), data.getJSONArray("c").getDouble(1));
+		}
+		ForceLaws b=new MovingTowardsFixedPoint(c,g);
+		return b;
+		
 	}
 
 }

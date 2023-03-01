@@ -8,7 +8,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	
 	private double G;
 	
-	NewtonUniversalGravitation(){
+	public NewtonUniversalGravitation(){
 		G = 6.67E-11;
 	}
 	

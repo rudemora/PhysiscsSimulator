@@ -4,7 +4,7 @@ import java.util.List;
 
 public class NoForce implements ForceLaws {
 
-	NoForce(){
+	public NoForce(){//Cambiado a public
 	}
 	
 	@Override

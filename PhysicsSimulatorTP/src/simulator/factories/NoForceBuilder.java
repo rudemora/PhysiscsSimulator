@@ -4,7 +4,8 @@ import org.json.JSONObject;
 
 import simulator.misc.Vector2D;
 import simulator.model.ForceLaws;
-import simulator.model.MovingTowardsFixedPoint;
+import simulator.model.NoForce;
+
 
 public class NoForceBuilder extends Builder<ForceLaws> {
 	
@@ -13,14 +14,9 @@ public class NoForceBuilder extends Builder<ForceLaws> {
 	}
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
-		try {
-			double g=data.getDouble("g");
-			Vector2D c=new Vector2D(data.getJSONArray("c").getDouble(0), data.getJSONArray("c").getDouble(1));
-			ForceLaws b=new MovingTowardsFixedPoint(c,g);
-			return b;
-		}catch(Exception e){
-			throw new IllegalArgumentException("OSASUNA NUNCA SE RINDE");
-		}
+		NoForce b= new NoForce();
+		return b;
+		
 	}
 
 }

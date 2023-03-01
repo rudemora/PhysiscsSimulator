@@ -32,10 +32,19 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 		if (info == null) {// TODO y te callas, osasuna me toca las bolas
 			throw new IllegalArgumentException("Invalid value for createInstance: null");
 		}
+		T t=null;
 		if(_builders.containsKey(info.getString("type"))) {
-			createInstance(info.getJSONObject("type"));
+			Builder<T> b=_builders.get(info.getString("type"));
+			JSONObject data= new JSONObject();
+			if(info.has("data")) {
+				data=info.getJSONObject("data");
+			}
+			t=b.createInstance(data);
+			return t;
 		}
-		return null;
+		
+		throw new IllegalArgumentException("Invalid value for createInstance: " +info.toString());
+		
 	}
 
 	@Override

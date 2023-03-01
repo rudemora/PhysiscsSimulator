@@ -17,13 +17,16 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
-		try {
+		if(data.has("G")) {
 			double G=data.getDouble("G");
-			ForceLaws b=new NewtonUniversalGravitation(G);
+			NewtonUniversalGravitation b=new NewtonUniversalGravitation(G);
 			return b;
-		}catch(Exception e){
-			throw new IllegalArgumentException("OSASUNA NUNCA SE RINDE");
 		}
+		else {
+			NewtonUniversalGravitation b=new NewtonUniversalGravitation();
+			return b;
+		}
+		
 	}
 
 }
