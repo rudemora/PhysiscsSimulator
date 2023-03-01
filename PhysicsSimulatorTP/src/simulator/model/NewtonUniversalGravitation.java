@@ -12,7 +12,7 @@ public class NewtonUniversalGravitation implements ForceLaws {
 		G = 6.67E-11;
 	}
 	
-	NewtonUniversalGravitation (double g) throws IllegalArgumentException {
+	public NewtonUniversalGravitation (double g) throws IllegalArgumentException {//He puesto el public
 		if (g > 0) {
 			G = g;
 		}

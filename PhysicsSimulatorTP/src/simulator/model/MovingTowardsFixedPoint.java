@@ -9,7 +9,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	private Vector2D vectorC;
 	private double acelerationG;
 	
-	MovingTowardsFixedPoint (Vector2D c, double g) throws IllegalArgumentException {
+	public MovingTowardsFixedPoint (Vector2D c, double g) throws IllegalArgumentException {//lo he puesto a public
 		if (c == null || g <= 0) {
 			throw new IllegalArgumentException(); 
 		}
