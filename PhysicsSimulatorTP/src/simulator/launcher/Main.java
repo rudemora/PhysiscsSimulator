@@ -1,5 +1,7 @@
 package simulator.launcher;
 
+import java.util.ArrayList;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -9,7 +11,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
 
+import simulator.control.Controller;
+import simulator.factories.Builder;
+import simulator.factories.BuilderBasedFactory;
 import simulator.factories.Factory;
+import simulator.factories.MovingBodyBuilder;
+import simulator.factories.MovingTowardsFixedPointBuilder;
+import simulator.factories.NewtonUniversalGravitationBuilder;
+import simulator.factories.NoForceBuilder;
+import simulator.factories.StationaryBodyBuilder;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
 
@@ -35,6 +45,14 @@ public class Main {
 	private static Factory<ForceLaws> _forceLawsFactory;
 
 	private static void initFactories() {
+		ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
+		bodyBuilders.add(new MovingBodyBuilder());
+		bodyBuilders.add(new StationaryBodyBuilder());
+		_bodyFactory = new BuilderBasedFactory<Body>(bodyBuilders);
+		ArrayList<Builder<ForceLaws>> forceLawsFactory = new ArrayList<>();
+		forceLawsFactory.add(new NoForceBuilder());
+		forceLawsFactory.add(new NewtonUniversalGravitationBuilder());
+		forceLawsFactory.add(new MovingTowardsFixedPointBuilder());
 
 	}
 
@@ -53,7 +71,8 @@ public class Main {
 			parseInFileOption(line);
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
-
+			parseOutFileOption(line);
+			parseStepsOption(line);
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
 			//
@@ -93,18 +112,17 @@ public class Main {
 						+ factoryPossibleValues(_forceLawsFactory) + ". Default value: '" + _forceLawsDefaultValue
 						+ ".")
 				.build());
-		/*
-		//output
-		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg()
-				.desc("Output file, where output is written. Default value:  the standard output"
-						+ ".")
-				.build());
 		
 		//output
+		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg()
+				.desc("Output file, where output is written. Default value:  the standard output.")
+				.build());
+		
+		//steps
 	    cmdLineOptions.addOption(Option.builder("s").longOpt("steps").hasArg()
 				.desc("An integer representing the number of simulation steps. Default value: " + _stepsDefaultValue
 						+ ".")
-				.build());*/
+				.build());
 		return cmdLineOptions; 
 	}
 
@@ -140,13 +158,14 @@ public class Main {
 			throw new ParseException("In batch mode an input file of bodies is required");
 		}
 	}
-/*
+
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
 		_outFile = line.getOptionValue("o");
 		if (_outFile == null) {
 			throw new ParseException("In batch mode an output file of bodies is required");
 		}
-	}*/
+		
+	}
 	
 	private static void parseDeltaTimeOption(CommandLine line) throws ParseException {
 		String dt = line.getOptionValue("dt", _dtimeDefaultValue.toString());
@@ -158,6 +177,16 @@ public class Main {
 		}
 	}
 
+	private static void parseStepsOption(CommandLine line) throws ParseException{
+		String s = line.getOptionValue("s", _stepsDefaultValue.toString());
+		try {
+			_steps = Integer.parseInt(s);
+			assert (_steps > 0);
+		} catch(Exception e) {
+			throw new ParseException("Invalid steps value:" + s);
+		}
+	}
+	
 	private static JSONObject parseWRTFactory(String v, Factory<?> factory) {
 
 		// the value of v is either a tag for the type, or a tag:data where data is a
@@ -207,6 +236,12 @@ public class Main {
 	}
 
 	private static void startBatchMode() throws Exception {
+		//PhysicsSimulator simulator = new PhysicsSimulator(_forceLawsInfo), _dtime);
+		
+		//Controller controlador = new Controller(simulator, _forceLawsFactory, _bodyFactory);
+		//controlador.loadData();
+		//controlador.run(_steps, _outFile.);
+		
 	}
 
 	private static void start(String[] args) throws Exception {
