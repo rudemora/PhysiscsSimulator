@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -15,7 +16,7 @@ public class PhysicsSimulator {
 	private Map<String, BodiesGroup> map;
 	private double actualTime;
 	private ArrayList<String> idList;
-	PhysicsSimulator(ForceLaws object, double time) throws IllegalArgumentException {
+	public PhysicsSimulator(ForceLaws object, double time) throws IllegalArgumentException {
 		if (time <= 0 || object == null) {
 			throw new IllegalArgumentException();
 		}
@@ -68,7 +69,11 @@ public class PhysicsSimulator {
 		JSONObject json = new JSONObject();
 		json.put("time", actualTime);
 		for(int i = 0 ; i < idList.size(); i++) {
-			json.accumulate("groups", map.get(idList.get(i)).getState());
+			JSONArray array = new JSONArray();
+			//array.put(map.get(idList.get(i)).getState());
+			//System.out.println(array.toString());
+			json.append("groups", map.get(idList.get(i)).getState());
+			//json.accumulate("groups", array);//map.get(idList.get(i)).getState());
 		}
 		return json;
 	}

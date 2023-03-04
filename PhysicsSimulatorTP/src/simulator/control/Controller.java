@@ -53,6 +53,7 @@ public class Controller {
 		p.println("\"states\": [");
 		p.println(simulator.getState());
 		for(int i = 0; i < n; i++) {
+			p.print(","); //TODO ñapa
 			simulator.advance();
 			p.println(simulator.getState()); // TODO así o con toString() ?
 		}
