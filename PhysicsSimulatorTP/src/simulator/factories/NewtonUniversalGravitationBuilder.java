@@ -12,7 +12,6 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 
 	public NewtonUniversalGravitationBuilder() {
 		super("nlug", "ForceLaws");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -26,7 +25,6 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 			NewtonUniversalGravitation b=new NewtonUniversalGravitation();
 			return b;
 		}
-		
 	}
 
 }

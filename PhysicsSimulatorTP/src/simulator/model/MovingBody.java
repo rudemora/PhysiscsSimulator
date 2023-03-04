@@ -5,12 +5,10 @@ import simulator.misc.Vector2D;
 public class MovingBody extends Body {
 	public MovingBody(String id, String gId, Vector2D p, Vector2D v,double m) {
 		super(id, gId, p,v,m);
-		//aqui habria q hacer try catch tb supongo
 	}
 
 	@Override
 	void advance(double t) {
-		// TODO Auto-generated method stub
 		Vector2D aceleration;
 		if (masa == 0) {
 			aceleration = new Vector2D(0,0);
@@ -22,7 +20,4 @@ public class MovingBody extends Body {
 		velocity = velocity.plus(aceleration.scale(t));
 	}
 	
-	void changePosition() { // esto por qué está aquí? creo que no hace falta
-		
-	}
 }

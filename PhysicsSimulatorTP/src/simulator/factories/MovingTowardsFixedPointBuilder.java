@@ -18,7 +18,7 @@ public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
 		double g=9.81;
-		Vector2D c=new Vector2D(0,0);
+		Vector2D c=new Vector2D();
 		if(data.has("g")) {
 			g=data.getDouble("g");
 		}

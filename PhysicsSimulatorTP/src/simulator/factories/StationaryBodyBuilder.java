@@ -10,13 +10,12 @@ import simulator.model.StationaryBody;
 public class StationaryBodyBuilder extends Builder<Body>{
 
 	public StationaryBodyBuilder() {
-		super("st_body","Body");//FALTA COMPROBAR SI EL SEGUNDO ARGUMENTO(DESCRIPCION) ESTA BIEN
+		super("st_body","Body");
 	}
 	
 
 	@Override
 	protected Body createInstance(JSONObject data) {
-		// TODO Auto-generated method stub
 		try {
 			String id=data.getString("id");
 			String gid=data.getString("gid");
@@ -28,7 +27,7 @@ public class StationaryBodyBuilder extends Builder<Body>{
 			Body b=new StationaryBody(id,gid,p,m);
 			return b;
 		}catch(Exception e){
-			throw new IllegalArgumentException("OSASUNA NUNCA SE RINDE");
+			throw new IllegalArgumentException();
 		}
 
 	}

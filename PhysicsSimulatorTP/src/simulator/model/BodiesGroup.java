@@ -11,14 +11,8 @@ public class BodiesGroup {
 	private List<Body> bodyList;
 	
 	public BodiesGroup (String i, ForceLaws law) throws IllegalArgumentException {
-		if (i == "") {
-			throw new IllegalArgumentException("Id cannot be empty");
-		}
-		if (i == "  ") {
-			throw new IllegalArgumentException("Id must have at least one char that is not white space");
-		}
-		if (law == null) {
-			throw new IllegalArgumentException("Force laws cannot be null");
+		if (i == null || law == null || i.trim().length() <= 0) {
+			throw new IllegalArgumentException("Incorrect parameters introduced");
 		}
 		else {
 			id = i;
@@ -77,7 +71,7 @@ public class BodiesGroup {
 		return json;
 	}
 	
-	public String toString() {
+	public String toString() { //TODO no lo utilizamos
 		return getState().toString();
 	}
 	

@@ -27,7 +27,7 @@ public abstract class Builder<T> {
 	}
 
 	@Override
-	public String toString() {//TODO Esto no sale en la plantilla no?
+	public String toString() {
 		return _desc;
 	}
 

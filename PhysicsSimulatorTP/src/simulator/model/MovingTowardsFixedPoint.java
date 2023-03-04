@@ -9,9 +9,9 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	private Vector2D vectorC;
 	private double acelerationG;
 	
-	public MovingTowardsFixedPoint (Vector2D c, double g) throws IllegalArgumentException {//lo he puesto a public
+	public MovingTowardsFixedPoint (Vector2D c, double g) throws IllegalArgumentException {
 		if (c == null || g <= 0) {
-			throw new IllegalArgumentException(); 
+			throw new IllegalArgumentException("Incorrect parameters introduced"); 
 		}
 		vectorC = c;
 		acelerationG = g;
@@ -26,6 +26,6 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	}
 
 	public String toString() {
-		return "";  // TODO Auto-generated method stub
+		return "mtfp";  // TODO no lo utilizamos
 	}
 }

@@ -4,7 +4,8 @@ import java.util.List;
 
 public class NoForce implements ForceLaws {
 
-	public NoForce(){//Cambiado a public
+	public NoForce(){
+		
 	}
 	
 	@Override
@@ -14,6 +15,6 @@ public class NoForce implements ForceLaws {
 
 	
 	public String toString() {
-		return "";  // TODO Auto-generated method stub
+		return "nf";  // TODO Auto-generated method stub
 	}
 }

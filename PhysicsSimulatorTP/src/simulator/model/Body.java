@@ -11,10 +11,11 @@ public abstract class Body {
 	protected Vector2D fuerza;
 	protected Vector2D position;
 	double masa;
+	
 	//@Override
 	public Body(String i, String gi, Vector2D p, Vector2D v, double m) throws IllegalArgumentException {//hacer try catch y lanzar IllegalArgumentExeption
-		if (i == "" ||i == null || i.trim().length() <= 0 || gi == "" || gi == null || gi.trim().length()<= 0 || p == null || m <= 0 || v == null) {
-			throw new IllegalArgumentException();
+		if (i == null || i.trim().length() <= 0 || gi == "" || gi == null || gi.trim().length()<= 0 || p == null || m <= 0 || v == null) {
+			throw new IllegalArgumentException("Incorrect parameters introduced");
 		}
 		else {
 			id=i;
@@ -79,5 +80,7 @@ public abstract class Body {
 	public String toString() {
 		return getState().toString();
 	}
+	//TODO falta añadir método hashCode del UML, creo que es igual a BodiesGroup
+	
 }
 

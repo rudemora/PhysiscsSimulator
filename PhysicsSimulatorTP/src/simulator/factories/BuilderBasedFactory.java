@@ -24,12 +24,12 @@ public class BuilderBasedFactory<T> implements Factory<T> {
 	}
 	public void addBuilder(Builder<T> b) {
 		_builders.put(b.getTypeTag(), b);
-		_buildersInfo.add(b.getInfo()); //getBuilderInfo()
+		_buildersInfo.add(b.getInfo()); 
 	}
 	
 	@Override
 	public T createInstance(JSONObject info) {
-		if (info == null) {// TODO y te callas, osasuna me toca las bolas
+		if (info == null) {
 			throw new IllegalArgumentException("Invalid value for createInstance: null");
 		}
 		T t=null;

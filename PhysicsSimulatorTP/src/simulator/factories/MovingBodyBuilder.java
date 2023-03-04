@@ -28,7 +28,7 @@ public class MovingBodyBuilder extends Builder<Body>{
 			Body b=new MovingBody(id,gid,p,v,m);
 			return b;
 		}catch(Exception e){
-			throw new IllegalArgumentException("OSASUNA NUNCA SE RINDE");
+			throw new IllegalArgumentException();
 		}
 	}
 

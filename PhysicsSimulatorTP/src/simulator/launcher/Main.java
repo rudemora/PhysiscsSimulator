@@ -165,12 +165,8 @@ public class Main {
 		}
 	}
 
-	private static void parseOutFileOption(CommandLine line) throws ParseException {
-		_outFile = line.getOptionValue("o");
-		if (_outFile == null) {
-			throw new ParseException("In batch mode an output file of bodies is required");
-		}
-		
+	private static void parseOutFileOption(CommandLine line) {
+		_outFile = line.getOptionValue("o");		
 	}
 	
 	private static void parseDeltaTimeOption(CommandLine line) throws ParseException {
@@ -244,7 +240,13 @@ public class Main {
 		ForceLaws laws = _forceLawsFactory.createInstance(_forceLawsInfo);
 		PhysicsSimulator simulator = new PhysicsSimulator(laws, _dtime);
 		InputStream in = new FileInputStream(_inFile);
-		OutputStream out = new FileOutputStream(_outFile);
+		OutputStream out;
+		if (_outFile != null) {
+			out = new FileOutputStream(_outFile);
+		}
+		else {
+			out = System.out;
+		}
 		Controller controlador = new Controller(simulator, _forceLawsFactory, _bodyFactory);
 		controlador.loadData(in);
 		controlador.run(_steps, out);
