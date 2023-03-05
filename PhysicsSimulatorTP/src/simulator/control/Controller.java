@@ -51,11 +51,11 @@ public class Controller {
 		PrintStream p = new PrintStream(out);
 		p.println("{");
 		p.println("\"states\": [");
-		p.println(simulator.getState());
+		p.println(simulator.getState());//TODO quitando el getState() deberia funcionar y asi usamos el toString//NO HE ENCONTRADO DONDE SE HACE PRINT DE CUALQUIER OBJETO PARA PODER USAR SU TOSTRING()
 		for(int i = 0; i < n; i++) {
-			p.print(","); //TODO ñapa
+			p.print(","); //TODO ñapa (lo puedes meter en el toString de simulator)
 			simulator.advance();
-			p.println(simulator.getState()); // TODO así o con toString() ?
+			p.println(simulator.getState()); // TODO así o con toString() ? yo quitaria el toState()
 		}
 		p.println("]");
 		p.println("}");
