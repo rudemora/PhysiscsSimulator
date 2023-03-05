@@ -69,16 +69,12 @@ public class PhysicsSimulator {
 		JSONObject json = new JSONObject();
 		json.put("time", actualTime);
 		for(int i = 0 ; i < idList.size(); i++) {
-			//JSONArray array = new JSONArray();
-			//array.put(map.get(idList.get(i)).getState());
-			//System.out.println(array.toString());
 			json.append("groups", map.get(idList.get(i)).getState());
-			//json.accumulate("groups", array);//map.get(idList.get(i)).getState());
 		}
 		return json;
 	}
 	
-	public String toString() { //TODO no lo utilizamos
+	public String toString() { 
 		return getState().toString();
 	}
 }

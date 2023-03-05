@@ -15,6 +15,6 @@ public class NoForce implements ForceLaws {
 
 	
 	public String toString() {
-		return "nf";  // TODO Auto-generated method stub
+		return "nf";  
 	}
 }

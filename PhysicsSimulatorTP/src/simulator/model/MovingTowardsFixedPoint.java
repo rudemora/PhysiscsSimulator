@@ -26,6 +26,6 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	}
 
 	public String toString() {
-		return "mtfp";  // TODO no lo utilizamos
+		return "mtfp";  
 	}
 }

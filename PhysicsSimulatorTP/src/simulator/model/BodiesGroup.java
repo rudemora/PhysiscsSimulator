@@ -71,7 +71,7 @@ public class BodiesGroup {
 		return json;
 	}
 	
-	public String toString() { //TODO no lo utilizamos
+	public String toString() { 
 		return getState().toString();
 	}
 	

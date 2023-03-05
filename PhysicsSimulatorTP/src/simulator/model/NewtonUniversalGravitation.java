@@ -39,6 +39,6 @@ public class NewtonUniversalGravitation implements ForceLaws {
 	}
 	
 	public String toString() {
-		 return "nlug"; //TODO no utilizamos este método
+		 return "nlug"; 
 	}
 }
