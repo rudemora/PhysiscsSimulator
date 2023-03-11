@@ -9,8 +9,7 @@ public abstract class Builder<T> {
 	
 	public Builder(String typeTag, String desc) {
 		if (typeTag == null || desc == null || typeTag.length() == 0 || desc.length() == 0)
-			throw new IllegalArgumentException("Invalid type/desc");
-		
+			throw new IllegalArgumentException("Invalid type/desc");	
 		_typeTag = typeTag;
 		_desc = desc;
 	}
@@ -32,4 +31,5 @@ public abstract class Builder<T> {
 	}
 
 	protected abstract T createInstance(JSONObject data);
+	
 }

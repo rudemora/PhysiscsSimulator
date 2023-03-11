@@ -19,5 +19,6 @@ public class NoForceBuilder extends Builder<ForceLaws> {
 		return b;
 		
 	}
-
+	
+	
 }

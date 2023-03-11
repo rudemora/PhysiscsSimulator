@@ -26,6 +26,6 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	}
 
 	public String toString() {
-		return "mtfp";  
+		return "Moving towards " + vectorC + "with constant acceleration " + acelerationG + ".";  
 	}
 }

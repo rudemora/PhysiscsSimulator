@@ -15,6 +15,6 @@ public class NoForce implements ForceLaws {
 
 	
 	public String toString() {
-		return "nf";  
+		return "No Force";  
 	}
 }
