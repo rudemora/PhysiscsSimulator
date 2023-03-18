@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -27,6 +29,7 @@ import simulator.factories.StationaryBodyBuilder;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
 import simulator.model.PhysicsSimulator;
+import simulator.view.MainWindow;
 
 
 public class Main {
@@ -36,6 +39,7 @@ public class Main {
 	private final static Integer _stepsDefaultValue = 150;
 	private final static Double _dtimeDefaultValue = 2500.0;
 	private final static String _forceLawsDefaultValue = "nlug";
+	private final static String _modeDefaultValue = "gui";
 
 	// some attributes to stores values corresponding to command-line parameters
 	//
@@ -44,17 +48,24 @@ public class Main {
 	private static String _inFile = null;
 	private static String _outFile = null;
 	private static JSONObject _forceLawsInfo = null;
+	private static String _mode = null;
 
 	// factories
 	private static Factory<Body> _bodyFactory;
 	private static Factory<ForceLaws> _forceLawsFactory;
 
 	private static void initFactories() {
+		
 		ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
+		
 		bodyBuilders.add(new MovingBodyBuilder());
+
 		bodyBuilders.add(new StationaryBodyBuilder());
+
 		_bodyFactory = new BuilderBasedFactory<Body>(bodyBuilders);
+
 		ArrayList<Builder<ForceLaws>> forceLawsFactory = new ArrayList<>();
+
 		forceLawsFactory.add(new NoForceBuilder());
 		forceLawsFactory.add(new NewtonUniversalGravitationBuilder());
 		forceLawsFactory.add(new MovingTowardsFixedPointBuilder());
@@ -74,11 +85,14 @@ public class Main {
 		try {
 			CommandLine line = parser.parse(cmdLineOptions, args);
 			parseHelpOption(line, cmdLineOptions);
+			parseModeOption(line);
+			
 			parseInFileOption(line);
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
 			parseOutFileOption(line);
 			parseStepsOption(line);
+			
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
 			//
@@ -119,6 +133,13 @@ public class Main {
 						+ ".")
 				.build());
 		
+		//mode
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg()
+				.desc("Execution Mode.Possible values: 'batch' (Batch mode), 'gui' (Graphical User Interface mode)"
+						+ ". Default value: '" + _modeDefaultValue
+						+ ".")
+				.build());
+		
 		//output
 		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg()
 				.desc("Output file, where output is written. Default value:  the standard output.")
@@ -129,6 +150,8 @@ public class Main {
 				.desc("An integer representing the number of simulation steps. Default value: " + _stepsDefaultValue
 						+ ".")
 				.build());
+	    
+	    
 		return cmdLineOptions; 
 	}
 
@@ -160,9 +183,6 @@ public class Main {
 
 	private static void parseInFileOption(CommandLine line) throws ParseException {
 		_inFile = line.getOptionValue("i");
-		if (_inFile == null) {
-			throw new ParseException("In batch mode an input file of bodies is required");
-		}
 	}
 
 	private static void parseOutFileOption(CommandLine line) {
@@ -187,6 +207,20 @@ public class Main {
 		} catch(Exception e) {
 			throw new ParseException("Invalid steps value:" + s);
 		}
+	}
+	
+	private static void parseModeOption(CommandLine line) throws ParseException{
+		String s = line.getOptionValue("m");
+		if (s == null) {
+			_mode = _modeDefaultValue;
+		}
+		else if (s == "gui" || s=="batch") {
+			_mode = s;
+		}
+		else {
+			throw new ParseException("Invalid mode.");
+		}
+				
 	}
 	
 	private static JSONObject parseWRTFactory(String v, Factory<?> factory) {
@@ -239,6 +273,9 @@ public class Main {
 	private static void startBatchMode() throws Exception {
 		ForceLaws laws = _forceLawsFactory.createInstance(_forceLawsInfo);
 		PhysicsSimulator simulator = new PhysicsSimulator(laws, _dtime);
+		if (_inFile == null) {
+			throw new ParseException("In batch mode an input file of bodies is required");
+		}
 		InputStream in = new FileInputStream(_inFile);
 		OutputStream out;
 		if (_outFile != null) {
@@ -254,9 +291,25 @@ public class Main {
 		
 	}
 
+	private static void startGUIMode() throws Exception {
+		ForceLaws laws = _forceLawsFactory.createInstance(_forceLawsInfo);
+		PhysicsSimulator simulator = new PhysicsSimulator(laws, _dtime);
+		Controller controlador = new Controller(simulator, _forceLawsFactory, _bodyFactory);
+		if (_inFile != null) {
+			InputStream in = new FileInputStream(_inFile);
+			controlador.loadData(in);
+		}
+		SwingUtilities.invokeAndWait(() -> new MainWindow(controlador));
+	}
+	
 	private static void start(String[] args) throws Exception {
 		parseArgs(args);
-		startBatchMode();
+		if (_mode == _modeDefaultValue) {
+			startGUIMode();
+		}
+		else {
+			startBatchMode();
+		}
 	}
 
 	public static void main(String[] args) {

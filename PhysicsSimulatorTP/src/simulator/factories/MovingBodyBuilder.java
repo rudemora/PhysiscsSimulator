@@ -31,5 +31,7 @@ public class MovingBodyBuilder extends Builder<Body>{
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	
 
 }

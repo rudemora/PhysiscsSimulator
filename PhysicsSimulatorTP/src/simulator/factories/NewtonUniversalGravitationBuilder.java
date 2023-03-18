@@ -11,7 +11,7 @@ import simulator.model.NewtonUniversalGravitation;
 public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 
 	public NewtonUniversalGravitationBuilder() {
-		super("nlug", "ForceLaws");
+		super("nlug", "Newton's law of universal gravitation");
 	}
 
 	@Override
@@ -27,4 +27,19 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 		}
 	}
 
+	
+	public JSONObject getInfo() {
+		JSONObject ob = new JSONObject();
+		ob.put("type", getTypeTag());
+		ob.put("desc", toString());
+		ob.put("data", fillInData());
+		return ob;
+	}
+	
+	private String fillInData() {
+		return " {\r\n"
+				+ "\"G\": \"the gravitational constant (a number)\"\r\n"
+				+ "}\r\n"
+				+ " ";
+	}
 }

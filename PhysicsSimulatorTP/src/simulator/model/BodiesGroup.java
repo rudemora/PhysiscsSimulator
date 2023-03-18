@@ -1,14 +1,17 @@
 package simulator.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONObject;
 
-public class BodiesGroup {
+public class BodiesGroup implements Iterable<Body>{
 	private String id;
 	private ForceLaws laws;
 	private List<Body> bodyList;
+	private List<Body> bodyListRO;
 	
 	public BodiesGroup (String i, ForceLaws law) throws IllegalArgumentException {
 		if (i == null || law == null || i.trim().length() <= 0) {
@@ -18,6 +21,7 @@ public class BodiesGroup {
 			id = i;
 			laws = law;
 			bodyList = new ArrayList<Body>(); 
+			bodyListRO = Collections.unmodifiableList(bodyList);
 		}
 	}
 	
@@ -99,5 +103,14 @@ public class BodiesGroup {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}	
+	
+	public String getForceLawsInfo() {
+		return laws.toString();
+	}
+
+	@Override
+	public Iterator<Body> iterator() {
+		return bodyListRO.iterator();
+	}
 }
 

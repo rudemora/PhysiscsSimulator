@@ -14,6 +14,7 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 	private double dt;
 	private ForceLaws laws;
 	private Map<String, BodiesGroup> map;
+	private Map<String, BodiesGroup> mapRO;
 	private double actualTime;
 	private ArrayList<String> idList;
 	private ArrayList<SimulatorObserver> listObserver;
@@ -28,6 +29,7 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 			map = new HashMap<String, BodiesGroup>();
 			idList = new ArrayList<String>();
 			listObserver = new ArrayList<SimulatorObserver>();
+			mapRO = Collections.unmodifiableMap(map);
 		}
 	}
 	
@@ -36,6 +38,9 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 			bg.advance(dt);
 		}
 		actualTime += dt;
+		for(SimulatorObserver s:listObserver) {
+			s.onAdvance(mapRO, actualTime);
+		}
 	}
 	
 	public void addGroup(String id) throws IllegalArgumentException {
@@ -46,12 +51,18 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 			BodiesGroup bg = new BodiesGroup(id, laws);
 			idList.add(id);
 			map.put(id, bg);
+			for(SimulatorObserver s:listObserver) {
+				s.onGroupAdded(mapRO, bg);
+			}
 		}
 	}
 	
 	public void addBody(Body b) throws IllegalArgumentException {
 		if (map.containsKey(b.getgId())) {
 			map.get(b.getgId()).addBody(b);
+			for(SimulatorObserver s:listObserver) {
+				s.onBodyAdded(mapRO, b);
+			}
 		}
 		else {
 			throw new IllegalArgumentException("There's not a group with this id");
@@ -64,6 +75,9 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		}
 		else {
 			map.get(id).setForceLaws(fl);
+			for(SimulatorObserver s:listObserver) {
+				s.onForceLawsChanged(map.get(id));
+			}
 		}
 	}
 	
@@ -81,10 +95,12 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 	}
 	
 	public void reset() { //TODO dice en el enunciado con el metodo clear??
-		map = new HashMap<String, BodiesGroup>();
-		idList = new ArrayList<String>();
-		dt = 0; 
+		map.clear();
+		idList.clear();
 		actualTime = 0; //TODO he puesto los dos a 0 pero no se si solo hay que poner este
+		for(SimulatorObserver s:listObserver) {
+			s.onReset(mapRO, actualTime, dt);
+		}
 	}
 	
 	public void setDeltaTime(double dt) throws IllegalArgumentException {
@@ -93,6 +109,9 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		}
 		else {
 			this.dt = dt;
+			for(SimulatorObserver s:listObserver) {
+				s.onDeltaTimeChanged(dt);
+			}
 		}
 	}
 
@@ -102,6 +121,7 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		for(SimulatorObserver s: listObserver) {
 			if (s.equals(o)) {
 				inList = true;
+				o.onRegister(mapRO, actualTime, dt);
 			}
 		}
 		if (!inList) {
@@ -112,14 +132,10 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 
 	@Override
 	public void removeObserver(SimulatorObserver o) {
-		boolean inList = false;
 		for(SimulatorObserver s: listObserver) {
 			if (s.equals(o)) {
-				inList = true;
+				listObserver.remove(o);
 			}
-		}
-		if (inList) {
-			listObserver.remove(o);
 		}
 	}
 }

@@ -10,7 +10,7 @@ import simulator.model.NoForce;
 public class NoForceBuilder extends Builder<ForceLaws> {
 	
 	public NoForceBuilder() {
-		super("nf", "ForceLaws");
+		super("nf", "No force");
 	}
 	
 	@Override
@@ -20,5 +20,16 @@ public class NoForceBuilder extends Builder<ForceLaws> {
 		
 	}
 	
+	public JSONObject getInfo() {
+		JSONObject ob = new JSONObject();
+		ob.put("type", getTypeTag());
+		ob.put("desc", toString());
+		ob.put("data", fillInData());
+		return ob;
+	}
+	
+	private String fillInData() {
+		return "{}";
+	}
 	
 }
