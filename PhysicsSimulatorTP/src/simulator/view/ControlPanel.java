@@ -29,6 +29,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	private boolean _stopped = true; // utilizado en los botones de run/stop
 	private JButton _quitButton;
 	private JButton _loadButton;
+	private JButton _forceButton;
+	private JButton _openButton;
+	private JButton _runButton;
+	private JButton _stopButton;
 	// TODO añade más atributos aquí …
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -59,11 +63,51 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_fc = new JFileChooser();
 		_toolaBar.addSeparator();
 		_loadButton = new JButton();
-		_loadButton.setToolTipText("Load bodies file into the editor");
+		_loadButton.setToolTipText("Load an input file into the simulator");
 		_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
-		//_loadButton.addActionListener(_fc.showOpenDialog(_fc) 
+		/*class GestorFile implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int res = _fc.showOpenDialog(Utils.getWindow(this));
+			}
+			
+		}*/
+		//GestorFile gestorFileChooser = new GestorFile();
+		//_loadButton.addActionListener(gestorFileChooser);
 		_toolaBar.add(_loadButton,FlowLayout.LEFT);
-		//_fc = …
+		
+		//ForceLaws
+		_toolaBar.addSeparator();
+		_forceButton = new JButton(); //crear boton
+		_forceButton.setToolTipText("Select force laws for groups"); //descripcion del boton
+		_forceButton.setIcon(new ImageIcon("resources/icons/physics.png")); //imagen del boton
+		_forceButton.addActionListener((e) -> Utils.quit(this)); 
+		_toolaBar.add(_forceButton, FlowLayout.LEFT + 1);
+		
+		//ViewerWindow
+		_toolaBar.addSeparator();
+		_openButton = new JButton(); //crear boton
+		_openButton.setToolTipText("Open viewer window"); //descripcion del boton
+		_openButton.setIcon(new ImageIcon("resources/icons/open.png")); //imagen del boton
+		_openButton.addActionListener((e) -> Utils.quit(this)); 
+		_toolaBar.add(_openButton, FlowLayout.LEFT + 2);
+		
+		//Run Button
+		_toolaBar.addSeparator();
+		_runButton = new JButton(); //crear boton
+		_runButton.setToolTipText("Run the simulator"); //descripcion del boton
+		_runButton.setIcon(new ImageIcon("resources/icons/run.png")); //imagen del boton
+		_runButton.addActionListener((e) -> Utils.quit(this)); 
+		_toolaBar.add(_runButton, FlowLayout.LEFT + 3);
+		
+		//Stop Button
+		_toolaBar.addSeparator();
+		_stopButton = new JButton(); //crear boton
+		_stopButton.setToolTipText("Stop the simulator"); //descripcion del boton
+		_stopButton.setIcon(new ImageIcon("resources/icons/stop.png")); //imagen del boton
+		_stopButton.addActionListener((e) -> Utils.quit(this)); 
+		_toolaBar.add(_stopButton, FlowLayout.LEFT + 4);
 	}
 	
 	
