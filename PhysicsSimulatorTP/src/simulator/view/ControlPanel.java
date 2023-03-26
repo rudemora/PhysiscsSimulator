@@ -60,11 +60,43 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_toolaBar.add(_quitButton);
 		// TODO crear el selector de ficheros
 		// Selector ficheros
-		_fc = new JFileChooser();
+		
+		
+		
 		_toolaBar.addSeparator();
 		_loadButton = new JButton();
 		_loadButton.setToolTipText("Load an input file into the simulator");
 		_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
+		_loadButton.addActionListener((e)-> gestorFile());
+		_toolaBar.add(_loadButton,FlowLayout.LEFT);
+		
+		
+		/*class GestorFile extends JFileChooser implements ActionListener{
+			private static final long serialVersionUID = 1L;
+			JFileChooser _fc;
+			public GestorFile() {
+				_toolaBar.addSeparator();
+				_loadButton = new JButton();
+				_loadButton.setToolTipText("Load an input file into the simulator");
+				_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
+				_loadButton.addActionListener(this);
+				_toolaBar.add(_loadButton,FlowLayout.LEFT);
+			
+			}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_fc.showOpenDialog(Utils.getWindow(this));//No creo q sea asi, deberia abrirse desde utils y su metodo estatico no?
+				int ret=_fc.showOpenDialog(_fc);
+				if(ret==JFileChooser.APPROVE_OPTION) {
+					//_ctrl.reset();
+					//falta cargar el fichero seleccionado en el simulador
+					System.out.println("lolol");
+				}
+				
+				
+			}
+		}
+		_fc = new GestorFile();
 		/*class GestorFile implements ActionListener {
 
 			@Override
@@ -75,22 +107,22 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		}*/
 		//GestorFile gestorFileChooser = new GestorFile();
 		//_loadButton.addActionListener(gestorFileChooser);
-		_toolaBar.add(_loadButton,FlowLayout.LEFT);
+		
 		
 		//ForceLaws
 		_toolaBar.addSeparator();
 		_forceButton = new JButton(); //crear boton
 		_forceButton.setToolTipText("Select force laws for groups"); //descripcion del boton
 		_forceButton.setIcon(new ImageIcon("resources/icons/physics.png")); //imagen del boton
-		_forceButton.addActionListener((e) -> Utils.quit(this)); 
+		_forceButton.addActionListener((e) -> force()); 
 		_toolaBar.add(_forceButton, FlowLayout.LEFT + 1);
 		
 		//ViewerWindow
 		_toolaBar.addSeparator();
 		_openButton = new JButton(); //crear boton
 		_openButton.setToolTipText("Open viewer window"); //descripcion del boton
-		_openButton.setIcon(new ImageIcon("resources/icons/open.png")); //imagen del boton
-		_openButton.addActionListener((e) -> Utils.quit(this)); 
+		_openButton.setIcon(new ImageIcon("resources/icons/viewer.png")); //imagen del boton
+		_openButton.addActionListener((e) -> open()); 
 		_toolaBar.add(_openButton, FlowLayout.LEFT + 2);
 		
 		//Run Button
@@ -98,7 +130,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_runButton = new JButton(); //crear boton
 		_runButton.setToolTipText("Run the simulator"); //descripcion del boton
 		_runButton.setIcon(new ImageIcon("resources/icons/run.png")); //imagen del boton
-		_runButton.addActionListener((e) -> Utils.quit(this)); 
+		_runButton.addActionListener((e) -> run()); 
 		_toolaBar.add(_runButton, FlowLayout.LEFT + 3);
 		
 		//Stop Button
@@ -106,7 +138,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_stopButton = new JButton(); //crear boton
 		_stopButton.setToolTipText("Stop the simulator"); //descripcion del boton
 		_stopButton.setIcon(new ImageIcon("resources/icons/stop.png")); //imagen del boton
-		_stopButton.addActionListener((e) -> Utils.quit(this)); 
+		_stopButton.addActionListener((e) -> stop()); 
 		_toolaBar.add(_stopButton, FlowLayout.LEFT + 4);
 	}
 	
@@ -114,6 +146,34 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	
 
 	
+	
+	
+
+	private Object stop() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private Object run() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private void gestorFile() {
+		JFileChooser _fc=new JFileChooser();
+		int ret=_fc.showOpenDialog(_fc);
+		if(ret==JFileChooser.APPROVE_OPTION) {
+			_ctrl.reset();
+			//_ctrl.loadData(_fc.getSelectedFile()); Habria que sobrecargar loadData o q?
+			System.out.println("lolol");
+		}
+	}
+	private void force() {
+		// TODO Auto-generated method stub
+	}
+	
+	private Object open() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
 		// TODO Auto-generated method stub
@@ -155,5 +215,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }

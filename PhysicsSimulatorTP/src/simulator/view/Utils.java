@@ -3,6 +3,7 @@ package simulator.view;
 import java.awt.Component;
 import java.awt.Frame;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -39,5 +40,6 @@ class Utils {
 			System.exit(0);
 		}
 	}
+	
 
 }
