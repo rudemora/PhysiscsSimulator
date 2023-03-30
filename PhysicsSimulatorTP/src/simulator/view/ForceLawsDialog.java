@@ -1,5 +1,6 @@
 package simulator.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.util.List;
@@ -24,6 +25,7 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private String[] _headers = { "Key", "Value", "Description" };
 	private JButton _ok;
 	private JButton _cancel;
+	private boolean _status;
 	// TODO en caso de ser necesario, añadir los atributos aquí…
 	ForceLawsDialog(Frame parent, Controller ctrl) {
 		super(parent, true);
@@ -46,15 +48,24 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 					return true;
 				}
 				return false;
-		}
+			}
 		};
+			
+		JTable tbl= new JTable(_dataTableModel);
+		JScrollPane scb= new JScrollPane(tbl);
+		mainPanel.add(scb);
+		
 		_dataTableModel.setColumnIdentifiers(_headers);
 		_lawsModel = new DefaultComboBoxModel<>();
 		// TODO añadir la descripción de todas las leyes de fuerza a _lawsModel
+		for(JSONObject j: _forceLawsInfo ) {
+			_lawsModel.addElement(j.getString("type"));
+		}
 		// TODO crear un combobox que use _lawsModel y añadirlo al panel
 		
 		_groupsModel = new DefaultComboBoxModel<>();
 		// TODO crear un combobox que use _groupsModel y añadirlo al panel
+		
 		// TODO crear los botones OK y Cancel y añadirlos al panel
 		_ok= new JButton();
 		_ok.addActionListener((e)->ok());
@@ -75,14 +86,15 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	public void open() {
+	public boolean open() {
 	if (_groupsModel.getSize() == 0)
-		//return _status;
+		return _status;
 	// TODO Establecer la posición de la ventana de diálogo de tal manera que se
 	// abra en el centro de la ventana principal
+		add(this,BorderLayout.CENTER);//TODO tengo dudas
 		pack();
 		setVisible(true);
-		//return _status;
+		return _status;
 	}
 	// TODO el resto de métodos van aquí…
 	@Override

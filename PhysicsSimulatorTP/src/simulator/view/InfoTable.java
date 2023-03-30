@@ -30,15 +30,15 @@ public class InfoTable extends JPanel{
 	}
 	private void initGUI() {
 	// TODO cambiar el layout del panel a BorderLayout()
-	JPanel pnlTable= new JPanel();
-	pnlTable.setLayout(new BorderLayout());
+	//JPanel pnlTable= new JPanel();
+	this.setLayout(new BorderLayout());
 	
 	// TODO añadir un borde con título al JPanel, con el texto _title
 	
 	// TODO añadir un JTable (con barra de desplazamiento vertical) que use
 	// _tableModel;
 	
-	String[]columnNames = new String[_tableModel.getColumnCount()];
+	/*String[]columnNames = new String[_tableModel.getColumnCount()];
 	for(int i=0; i<_tableModel.getColumnCount();i++) {
 		columnNames[i]=_tableModel.getColumnName(i);
 	}
@@ -47,8 +47,8 @@ public class InfoTable extends JPanel{
 		for(int j=0; j<_tableModel.getColumnCount(); j++) {
 			data[i][j]=_tableModel.getValueAt(i, j);
 		}
-	}
-	/*
+	}*/
+	
 	String[] columnNames= new String [2];
 	for(int i=0; i<2;i++) {
 		columnNames[i]= "columna"+i;
@@ -58,12 +58,13 @@ public class InfoTable extends JPanel{
 		for(int j=0;j<2;j++) {
 			data[i][j]="Casilla"+i+j;
 		}
-	}*/
+	}
 	
-	 JTable tbl= new JTable(data,columnNames);
+	 JTable tbl= new JTable(_tableModel);
+	 tbl.setShowGrid(false);
 	 JScrollPane scb= new JScrollPane(tbl);
-	 pnlTable.add(scb);
-	 
+	 this.add(scb);
+	 //TODO pensar en setvisible(boolean)
 	}
 	
 	

@@ -3,6 +3,7 @@ package simulator.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -203,10 +204,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	}
 	private void force() {
 		if(_force==null) {
-			//_force=new ForceLawsDialog(); Aun no se como se hace
+			
+			_force=new ForceLawsDialog(new Frame(),_ctrl);//TODO ñapa
 		}
 		
-		//_force.open()
+		_force.open();
 	}
 	
 	private void open() {
