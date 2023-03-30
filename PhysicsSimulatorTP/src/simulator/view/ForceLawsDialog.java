@@ -22,12 +22,14 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private Controller _ctrl;
 	private List<JSONObject> _forceLawsInfo;
 	private String[] _headers = { "Key", "Value", "Description" };
+	private JButton _ok;
+	private JButton _cancel;
 	// TODO en caso de ser necesario, añadir los atributos aquí…
 	ForceLawsDialog(Frame parent, Controller ctrl) {
 		super(parent, true);
 		_ctrl = ctrl;
 		initGUI();
-		// TODO registrar this como observer;
+		_ctrl.addObserver(this);
 	}
 	private void initGUI() {
 		setTitle("Force Laws Selection");
@@ -40,21 +42,38 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		_dataTableModel = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
-			// TODO hacer editable solo la columna 1
-				return true;
+				if(column==1) {
+					return true;
+				}
+				return false;
 		}
 		};
 		_dataTableModel.setColumnIdentifiers(_headers);
 		_lawsModel = new DefaultComboBoxModel<>();
 		// TODO añadir la descripción de todas las leyes de fuerza a _lawsModel
 		// TODO crear un combobox que use _lawsModel y añadirlo al panel
+		
 		_groupsModel = new DefaultComboBoxModel<>();
 		// TODO crear un combobox que use _groupsModel y añadirlo al panel
 		// TODO crear los botones OK y Cancel y añadirlos al panel
+		_ok= new JButton();
+		_ok.addActionListener((e)->ok());
+		mainPanel.add(_ok);
+		_cancel= new JButton();
+		_cancel.addActionListener((e)->cancel());
+		mainPanel.add(_cancel);
 		setPreferredSize(new Dimension(700, 400));
 		pack();
 		setResizable(false);
 		setVisible(false);
+	}
+	private Object cancel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private Object ok() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	public void open() {
 	if (_groupsModel.getSize() == 0)

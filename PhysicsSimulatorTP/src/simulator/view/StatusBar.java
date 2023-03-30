@@ -1,10 +1,13 @@
 package simulator.view;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import simulator.control.Controller;
 import simulator.model.BodiesGroup;
@@ -12,16 +15,36 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 class StatusBar extends JPanel implements SimulatorObserver {
+	private Controller _ctrl;
+	private JLabel _tiempo;
+	private JLabel _grupos;
+	private double time;
+	private int groups;
+	//private JPanel _Status
 	// TODO Añadir los atributos necesarios, si hace falta …
 	StatusBar(Controller ctrl) {
+	_ctrl=ctrl;
+	time=0;
+	groups=0;
 	initGUI();
+	_ctrl.addObserver(this);
+	
+	
 	// TODO registrar this como observador
 	}
 	private void initGUI() {
 	this.setLayout(new FlowLayout(FlowLayout.LEFT));
 	this.setBorder(BorderFactory.createBevelBorder(1));
 	// TODO Crear una etiqueta de tiempo y añadirla al panel
+	_tiempo= new JLabel("Time:   "+time);
+	add(_tiempo);
+	JSeparator s = new JSeparator(JSeparator.VERTICAL);
+	s.setPreferredSize(new Dimension(10, 20));
+	this.add(s);
+	
 	// TODO Crear la etiqueta de número de grupos y añadirla al panel
+	_grupos=new JLabel("Groups:   "+groups);
+	add(_grupos);
 	// TODO Utilizar el siguiente código para añadir un separador vertical
 	//
 	// JSeparator s = new JSeparator(JSeparator.VERTICAL);
@@ -32,6 +55,7 @@ class StatusBar extends JPanel implements SimulatorObserver {
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
 		// TODO Auto-generated method stub
+		this.time+=time;
 		
 	}
 	@Override
@@ -46,7 +70,7 @@ class StatusBar extends JPanel implements SimulatorObserver {
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
-		// TODO Auto-generated method stub
+		this.groups++;
 		
 	}
 	@Override
@@ -56,7 +80,7 @@ class StatusBar extends JPanel implements SimulatorObserver {
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
+		this.time=0;
 		
 	}
 	@Override

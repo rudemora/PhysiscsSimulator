@@ -1,6 +1,7 @@
 package simulator.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -32,6 +33,12 @@ public class MainWindow extends JFrame {
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
 		// TODO crear la tabla de grupos y añadirla a contentPanel.
 		// Usa setPreferredSize(new Dimension(500, 250)) para fijar su tamaño
+		InfoTable tg= new InfoTable("Groups", new GroupsTableModel(_ctrl));
+		tg.setPreferredSize(new Dimension(500,250));
+		InfoTable tb= new InfoTable("Bodies", new BodiesTableModel(_ctrl));
+		tb.setPreferredSize(new Dimension(500,250));
+		contentPanel.add(tg);
+		contentPanel.add(tb);
 		// TODO crear la tabla de cuerpos y añadirla a contentPanel.
 		// Usa setPreferredSize(new Dimension(500, 250)) para fijar su tamaño
 		// TODO llama a Utils.quit(MainWindow.this) en el método windowClosing
@@ -39,5 +46,6 @@ public class MainWindow extends JFrame {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
 		setVisible(true);
+		
 	}
 }

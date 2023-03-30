@@ -1,6 +1,7 @@
 package simulator.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +14,12 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;//Importado por mi
 import javax.swing.JPanel;
+import javax.swing.JSpinner;//Importado por mi
+import javax.swing.JTextField;//Importado por mi
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 import simulator.control.Controller;
 import simulator.model.BodiesGroup;
@@ -33,6 +38,11 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	private JButton _openButton;
 	private JButton _runButton;
 	private JButton _stopButton;
+	private ForceLawsDialog _force;
+	private JSpinner _pasosSimulacion;
+	private JTextField _dt;
+	private JLabel _nombreSpinner;
+	private JLabel _nombreTextField;
 	// TODO añade más atributos aquí …
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -50,25 +60,18 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		// _toolaBar.addSeparator() para añadir la línea de separación vertical
 		// entre las componentes que lo necesiten
 		
-		// Quit Button
-		_toolaBar.add(Box.createGlue()); // this aligns the button to the right
-		_toolaBar.addSeparator();
-		_quitButton = new JButton(); //crear boton
-		_quitButton.setToolTipText("Quit"); //descripcion del boton
-		_quitButton.setIcon(new ImageIcon("resources/icons/exit.png")); //imagen del boton
-		_quitButton.addActionListener((e) -> Utils.quit(this)); 
-		_toolaBar.add(_quitButton);
+		
 		// TODO crear el selector de ficheros
 		// Selector ficheros
 		
 		
-		
+		_fc=new JFileChooser();
 		_toolaBar.addSeparator();
 		_loadButton = new JButton();
 		_loadButton.setToolTipText("Load an input file into the simulator");
 		_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
 		_loadButton.addActionListener((e)-> gestorFile());
-		_toolaBar.add(_loadButton,FlowLayout.LEFT);
+		_toolaBar.add(_loadButton);
 		
 		
 		/*class GestorFile extends JFileChooser implements ActionListener{
@@ -115,7 +118,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_forceButton.setToolTipText("Select force laws for groups"); //descripcion del boton
 		_forceButton.setIcon(new ImageIcon("resources/icons/physics.png")); //imagen del boton
 		_forceButton.addActionListener((e) -> force()); 
-		_toolaBar.add(_forceButton, FlowLayout.LEFT + 1);
+		_toolaBar.add(_forceButton);
 		
 		//ViewerWindow
 		_toolaBar.addSeparator();
@@ -123,7 +126,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_openButton.setToolTipText("Open viewer window"); //descripcion del boton
 		_openButton.setIcon(new ImageIcon("resources/icons/viewer.png")); //imagen del boton
 		_openButton.addActionListener((e) -> open()); 
-		_toolaBar.add(_openButton, FlowLayout.LEFT + 2);
+		_toolaBar.add(_openButton);
 		
 		//Run Button
 		_toolaBar.addSeparator();
@@ -131,7 +134,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_runButton.setToolTipText("Run the simulator"); //descripcion del boton
 		_runButton.setIcon(new ImageIcon("resources/icons/run.png")); //imagen del boton
 		_runButton.addActionListener((e) -> run()); 
-		_toolaBar.add(_runButton, FlowLayout.LEFT + 3);
+		_toolaBar.add(_runButton);
+		_toolaBar.addSeparator();
+		
+		
+		
+		
 		
 		//Stop Button
 		_toolaBar.addSeparator();
@@ -139,7 +147,29 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_stopButton.setToolTipText("Stop the simulator"); //descripcion del boton
 		_stopButton.setIcon(new ImageIcon("resources/icons/stop.png")); //imagen del boton
 		_stopButton.addActionListener((e) -> stop()); 
-		_toolaBar.add(_stopButton, FlowLayout.LEFT + 4);
+		_toolaBar.add(_stopButton);
+		
+		
+		_nombreSpinner=new JLabel("Steps:");
+		_toolaBar.add(_nombreSpinner);
+		_toolaBar.addSeparator();
+		_pasosSimulacion= new JSpinner();//Esto no se si deberia estar siempre o cuando se pulsa el boton
+		_toolaBar.add(_pasosSimulacion);
+		_toolaBar.addSeparator();
+		_nombreTextField= new JLabel("Delta_Time:");
+		_toolaBar.add(_nombreTextField);
+		_dt=new JTextField();
+		_dt.setPreferredSize(new Dimension(70, 25));
+		_toolaBar.add(_dt);
+		
+		// Quit Button
+		_toolaBar.add(Box.createGlue()); // this aligns the button to the right
+		_toolaBar.addSeparator();
+		_quitButton = new JButton(); //crear boton
+		_quitButton.setToolTipText("Quit"); //descripcion del boton
+		_quitButton.setIcon(new ImageIcon("resources/icons/exit.png")); //imagen del boton
+		_quitButton.addActionListener((e) -> Utils.quit(this)); 
+		_toolaBar.add(_quitButton);
 	}
 	
 	
@@ -149,31 +179,91 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	
 	
 
-	private Object stop() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	private Object run() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+	
 	private void gestorFile() {
-		JFileChooser _fc=new JFileChooser();
+		
 		int ret=_fc.showOpenDialog(_fc);
 		if(ret==JFileChooser.APPROVE_OPTION) {
-			_ctrl.reset();
-			//_ctrl.loadData(_fc.getSelectedFile()); Habria que sobrecargar loadData o q?
-			System.out.println("lolol");
+			try {
+				_ctrl.reset();
+				InputStream in= new FileInputStream(_fc.getSelectedFile());
+				_ctrl.loadData(in);
+				System.out.println("lolol");
+				
+			}catch(Exception e){
+				
+				Utils.showErrorMsg("Error in gestorFile");
+			}
+			
+		
+			
+			
 		}
 	}
 	private void force() {
-		// TODO Auto-generated method stub
+		if(_force==null) {
+			//_force=new ForceLawsDialog(); Aun no se como se hace
+		}
+		
+		//_force.open()
 	}
 	
-	private Object open() {
+	private void open() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
+	private void run() {
+		
+		_loadButton.setEnabled(false);
+		_forceButton.setEnabled(false);
+		_openButton.setEnabled(false);
+		_runButton.setEnabled(false);
+		_stopped=false;
+		try {
+			double dt= Double.parseDouble(_dt.getText());
+			_ctrl.setDeltaTime(dt);
+			Integer n= (Integer) _pasosSimulacion.getValue();//HE HECHO CASTTTTTTTTTTTT PERO CREO Q NO HAY OTRA FORMA, O NO SE ME OCURRE
+			run_sim(n);
+		}catch(Exception e){
+			Utils.showErrorMsg("Error en el run");
+		}
+		
+	}
+	private void stop() {
+		_stopped=true;
+	}
+	
+	private void run_sim(int n) {
+		if (n > 0 && !_stopped) {
+		try {
+		_ctrl.run(1);
+		} catch (Exception e) {
+		// TODO llamar a Utils.showErrorMsg con el mensaje de error que
+		// corresponda
+		Utils.showErrorMsg("Error en el run_sim");
+		
+		_loadButton.setEnabled(true);
+		_forceButton.setEnabled(true);
+		_openButton.setEnabled(true);
+		_runButton.setEnabled(true);
+		_stopped = true;
+		return;
+		}
+		SwingUtilities.invokeLater(() -> run_sim(n - 1));
+		} else {
+		// TODO llamar a Utils.showErrorMsg con el mensaje de error que
+		// corresponda
+		Utils.showErrorMsg("Vamos rojillos");
+		_loadButton.setEnabled(true);
+		_forceButton.setEnabled(true);
+		_openButton.setEnabled(true);
+		_runButton.setEnabled(true);
+		_stopped = true;
+		_stopped = true;
+		}
+		}
+
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
 		// TODO Auto-generated method stub
@@ -207,7 +297,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	@Override
 	public void onDeltaTimeChanged(double dt) {
 		// TODO Auto-generated method stub
-		
+		//No entiendo que piden
 	}
 
 	@Override
