@@ -22,6 +22,7 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private DefaultTableModel _dataTableModel;
 	private Controller _ctrl;
 	private List<JSONObject> _forceLawsInfo;
+	//private List<BodiesGroup> _groupsInfo;
 	private String[] _headers = { "Key", "Value", "Description" };
 	private JButton _ok;
 	private JButton _cancel;
@@ -63,8 +64,10 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		}
 		// TODO crear un combobox que use _lawsModel y añadirlo al panel
 		
-		_groupsModel = new DefaultComboBoxModel<>();
+		
 		// TODO crear un combobox que use _groupsModel y añadirlo al panel
+		_groupsModel = new DefaultComboBoxModel<>();
+		
 		
 		// TODO crear los botones OK y Cancel y añadirlos al panel
 		_ok= new JButton();
@@ -78,17 +81,18 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		setResizable(false);
 		setVisible(false);
 	}
-	private Object cancel() {
-		// TODO Auto-generated method stub
-		return null;
+	private void cancel() {
+		setVisible(false);
+		
 	}
-	private Object ok() {
-		// TODO Auto-generated method stub
-		return null;
+	private void ok() {
+		//ahora falta actualizar los cambios en el grupo
+		setVisible(false);
 	}
 	public boolean open() {
-	if (_groupsModel.getSize() == 0)
-		return _status;
+		
+	//if (_groupsModel.getSize() == 0) //Es necesario comentarlo pq al ppio siempre pasa pq no estamos metiendo nada y nunca se pone set visible
+		//return _status;// no se que pollas hace
 	// TODO Establecer la posición de la ventana de diálogo de tal manera que se
 	// abra en el centro de la ventana principal
 		add(this,BorderLayout.CENTER);//TODO tengo dudas
@@ -114,12 +118,13 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
-		// TODO Auto-generated method stub
+		//_groupsInfo.add(g);
+		_groupsModel.addElement(g.getId());
 		
 	}
 	@Override
 	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override

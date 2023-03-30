@@ -205,7 +205,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	private void force() {
 		if(_force==null) {
 			
-			_force=new ForceLawsDialog(new Frame(),_ctrl);//TODO ñapa
+			_force=new ForceLawsDialog(new Frame("Force Laws Selection"),_ctrl);//TODO ñapa
 		}
 		
 		_force.open();
