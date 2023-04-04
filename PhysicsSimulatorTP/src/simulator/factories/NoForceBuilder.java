@@ -24,7 +24,7 @@ public class NoForceBuilder extends Builder<ForceLaws> {
 		JSONObject ob = new JSONObject();
 		ob.put("type", getTypeTag());
 		ob.put("desc", toString());
-		ob.put("data", fillInData());
+		ob.put("data", new JSONObject(fillInData()));
 		return ob;
 	}
 	

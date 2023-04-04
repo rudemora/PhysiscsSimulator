@@ -25,11 +25,12 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private JTable tbl;
 	private Controller _ctrl;
 	private List<JSONObject> _forceLawsInfo;
-	//private List<BodiesGroup> _groupsInfo;
+	private List<BodiesGroup> _groupsInfo;
 	private String[] _headers = { "Key", "Value", "Description" };
 	private JButton _ok;
 	private JButton _cancel;
 	private boolean _status;
+	int _selectedLawsIndex;
 	// TODO en caso de ser necesario, añadir los atributos aquí…
 	ForceLawsDialog(Frame parent, Controller ctrl) {
 		super(parent, true);
@@ -58,6 +59,7 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		
 		
 		_dataTableModel.setColumnIdentifiers(_headers);
+	
 		tbl= new JTable(_dataTableModel);
 		JScrollPane scb= new JScrollPane(tbl);
 		mainPanel.add(scb);
@@ -80,33 +82,58 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		
 		
 		// TODO crear los botones OK y Cancel y añadirlos al panel
-		_ok= new JButton();
+		_ok= new JButton("Ok");
 		_ok.addActionListener((e)->ok());
 		mainPanel.add(_ok);
-		_cancel= new JButton();
+		_cancel= new JButton("Cancel");
 		_cancel.addActionListener((e)->cancel());
 		mainPanel.add(_cancel);
 		setPreferredSize(new Dimension(700, 400));
 		pack();
 		setResizable(false);
 		setVisible(false);
+		//TODO faltan las labels
 	}
 	private void selectedLaw() {
-		int i= _comboLaws.getSelectedIndex();
-		JSONObject info= _forceLawsInfo.get(i);
+		_selectedLawsIndex= _comboLaws.getSelectedIndex();
+		JSONObject info= _forceLawsInfo.get(_selectedLawsIndex);
 		JSONObject data= info.getJSONObject("data");
+		for(int j=0; j<_dataTableModel.getRowCount();j++) {
+			_dataTableModel.removeRow(j);
+		}
+		int k=0;
 		for(String key: data.keySet()) {
+			String[] row= {key,"",data.getString(key)};
+			_dataTableModel.addRow(row);
+			k++;
 			
 		}
+		_dataTableModel.fireTableRowsInserted(0,k);
 		
 	}
 	private void cancel() {
 		setVisible(false);
+		_status=false;
 		
 	}
 	private void ok() {
 		//ahora falta actualizar los cambios en el grupo
-		setVisible(false);
+		try {
+			JSONObject data=new JSONObject();
+			for(int i=0;i<_dataTableModel.getRowCount();i++) {
+				
+				data.put( _dataTableModel.getValueAt(i, 0).toString(),_dataTableModel.getValueAt(i, 1));
+			}
+			JSONObject type= new JSONObject();
+			type.put("data", data);
+			type.put("type", _forceLawsInfo.get(_selectedLawsIndex).getString("type"));
+			_ctrl.setForceLaws(_groupsInfo.get(_comboGroups.getSelectedIndex()).getId(), type);
+			_status=true;
+			setVisible(false);
+		}catch(Exception e) {
+			Utils.showErrorMsg("Error en ForceLawsDialog");
+		}
+		
 	}
 	public boolean open() {
 		
@@ -114,8 +141,9 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		//return _status;// no se que pollas hace
 	// TODO Establecer la posición de la ventana de diálogo de tal manera que se
 	// abra en el centro de la ventana principal
-		add(this,BorderLayout.CENTER);//TODO tengo dudas
+		//add(this,BorderLayout.CENTER);//TODO tengo dudas
 		pack();
+		_status=true;
 		setVisible(true);
 		return _status;
 	}
@@ -138,10 +166,11 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
-		//_groupsInfo.add(g);
+		_groupsInfo.add(g);
 		
 		_groupsModel.addElement(g.getId());
-		//ahora para que se actualice en la combobox no se si borrarla y volber a crear otra o q
+		
+		//TODO ahora para que se actualice en la combobox no se si borrarla y bOLBER a crear otra o q
 		
 	}
 	@Override
