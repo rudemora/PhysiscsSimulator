@@ -68,7 +68,6 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 

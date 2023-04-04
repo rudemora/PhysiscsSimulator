@@ -88,35 +88,23 @@ class Viewer extends SimulationViewer {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-			}
-
+			}			
+			
 			/*
 			 * 
-			 * TODO
 			 * 
-			 * EN: handle keys 'j','l','i','m' to add 10/-10 to _originX/_originY, and then
-			 * call repaint(). This will make the origin point moves left/right/up/down. See
-			 * how the values of _centerX and _centerY are calculated in method
-			 * paintComponent
+			 * 
 			 * 
 			 * ES: Gestiona las teclas 'j','l','i','m' para sumar 10/-10 a
 			 * _originX/_originY, y luego llame a repaint(). Esto hará que el punto de
 			 * origen se mueva hacia la izquierda/derecha/arriba/abajo. Vea cómo se calculan
 			 * los valores de _centerX y _centerY en el método paintComponent
 			 * 
-			 * TODO
-			 * 
-			 * EN: handle key 'k' to set _originX and _originY to 0, and then call
-			 * repaint(). This will return the origin point to the center of the window.
 			 * 
 			 * ES: Gestiona la tecla 'k' para poner _originX y _originY en 0, y luego llame
 			 * a repaint(). Esto hace que el punto de origen sea el centro de la ventana.
 			 * 
-			 * TODO
 			 * 
-			 * EN: handle key 'h' to change the value of _showHelp to !_showHelp, and then
-			 * call repaint(). This will make show/hide the help text - see method
-			 * paintComponent
 			 * 
 			 * ES: gestiona la tecla 'h' para cambiar el valor de _showHelp a !_showHelp, y
 			 * luego llame a repaint(). Esto hará que se muestre/oculte el texto de ayuda -
@@ -124,23 +112,12 @@ class Viewer extends SimulationViewer {
 			 * 
 			 * TODO
 			 * 
-			 * EN: handle key 'v' to change the value of _showVectors to !_showVectors, and
-			 * then call repaint(). You will use this variable in drawBodies to decide if to
-			 * show or hide the velocity/force vectors.
-			 * 
 			 * ES: gestiona la tecla 'v' para cambiar el valor de _showVectors a
 			 * !_showVectors, y luego llame a repaint(). Tienes que usar esta variable en
 			 * drawBodies para decidir si mostrar u ocultar los vectores de
 			 * velocidad/fuerza.
 			 * 
-			 * TODO
 			 * 
-			 * EN: handle key 'g' such that it makes the next group visible. Note that after
-			 * the last group all bodies are shown again. This should be done by modifying
-			 * _selectedGroupIdx from -1 (all groups) to _groups.size()-1 in a circular way.
-			 * When its value is -1 you should set _selectedGroup to null, otherwise to the
-			 * id of the corresponding group. Then in method showBodies you will draw only
-			 * those that belong to the selected group.
 			 * 
 			 * ES: gestionar la tecla 'g' de manera que haga visible el siguiente grupo.
 			 * Tenga en cuenta que después del último grupo, se muestran todos los cuerpos.
@@ -165,7 +142,46 @@ class Viewer extends SimulationViewer {
 					autoScale();
 					repaint();
 					break;
-
+				case 'j':
+					_originX += 10;
+					repaint();
+					break;
+				case 'l':
+					_originX -= 10;
+					repaint();
+					break;
+				case 'i':
+					_originY += 10;
+					repaint();
+					break;
+				case 'm':
+					_originY -= 10;
+					repaint();
+					break;
+				case 'k':
+					_originX = 0;
+					_originY = 0;
+					repaint();
+					break;
+				case 'h':
+					_showHelp = !_showHelp;
+					repaint();
+					break;
+				case 'v':
+					_showVectors = !_showVectors;
+					repaint();
+				case 'g':
+					_selectedGroupIdx = _selectedGroupIdx + 1;
+					if (_selectedGroupIdx == _groups.size()) {
+						_selectedGroupIdx = -1;
+					}
+					if (_selectedGroupIdx == -1) {
+						_selectedGroup = null;
+					}
+					else {
+						_selectedGroup = _groups.get(_selectedGroupIdx).getId();
+					}
+					break;
 				default:
 				}
 			}
@@ -212,7 +228,9 @@ class Viewer extends SimulationViewer {
 		_centerY = getHeight() / 2 - _originY;
 
 		// TODO draw red cross at (_centerX,_centerY)
-
+		gr.setColor(Color.RED);
+		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
+		gr.drawLine(_centerX, _centerY  - 5, _centerX, _centerY + 5);
 		// draw bodies
 		drawBodies(gr);
 
@@ -244,6 +262,7 @@ class Viewer extends SimulationViewer {
 		 * Selected Group: ...
 		 * 
 		 */
+		
 	}
 
 	private void drawBodies(Graphics2D g) {
