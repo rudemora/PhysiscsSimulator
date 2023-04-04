@@ -19,7 +19,10 @@ import simulator.model.SimulatorObserver;
 class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private DefaultComboBoxModel<String> _lawsModel;
 	private DefaultComboBoxModel<String> _groupsModel;
+	private JComboBox<String> _comboLaws;
+	private JComboBox<String> _comboGroups;
 	private DefaultTableModel _dataTableModel;
+	private JTable tbl;
 	private Controller _ctrl;
 	private List<JSONObject> _forceLawsInfo;
 	//private List<BodiesGroup> _groupsInfo;
@@ -52,21 +55,28 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 			}
 		};
 			
-		JTable tbl= new JTable(_dataTableModel);
-		JScrollPane scb= new JScrollPane(tbl);
-		mainPanel.add(scb);
+		
 		
 		_dataTableModel.setColumnIdentifiers(_headers);
+		tbl= new JTable(_dataTableModel);
+		JScrollPane scb= new JScrollPane(tbl);
+		mainPanel.add(scb);
 		_lawsModel = new DefaultComboBoxModel<>();
+		
 		// TODO añadir la descripción de todas las leyes de fuerza a _lawsModel
 		for(JSONObject j: _forceLawsInfo ) {
 			_lawsModel.addElement(j.getString("type"));
 		}
 		// TODO crear un combobox que use _lawsModel y añadirlo al panel
 		
+		_comboLaws= new JComboBox<String> (_lawsModel);
+		mainPanel.add(_comboLaws);
+		_comboLaws.addActionListener((e)->selectedLaw());
 		
 		// TODO crear un combobox que use _groupsModel y añadirlo al panel
 		_groupsModel = new DefaultComboBoxModel<>();
+		_comboGroups= new JComboBox<String> (_groupsModel);
+		mainPanel.add(_comboGroups);
 		
 		
 		// TODO crear los botones OK y Cancel y añadirlos al panel
@@ -80,6 +90,15 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		pack();
 		setResizable(false);
 		setVisible(false);
+	}
+	private void selectedLaw() {
+		int i= _comboLaws.getSelectedIndex();
+		JSONObject info= _forceLawsInfo.get(i);
+		JSONObject data= info.getJSONObject("data");
+		for(String key: data.keySet()) {
+			
+		}
+		
 	}
 	private void cancel() {
 		setVisible(false);
@@ -108,18 +127,21 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	@Override
 	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
-		// TODO Auto-generated method stub
+		_comboGroups.removeAll();
+		
 		
 	}
 	@Override
-	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {
+	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {//TODO no se que hace asi q ns si hay q hacer algo aqui
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		//_groupsInfo.add(g);
+		
 		_groupsModel.addElement(g.getId());
+		//ahora para que se actualice en la combobox no se si borrarla y volber a crear otra o q
 		
 	}
 	@Override
