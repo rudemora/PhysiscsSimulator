@@ -15,13 +15,16 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 class StatusBar extends JPanel implements SimulatorObserver {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Controller _ctrl;
 	private JLabel _tiempo;
 	private JLabel _grupos;
 	private double time;
 	private int groups;
-	//private JPanel _Status
-	// TODO Añadir los atributos necesarios, si hace falta …
+	// Añadir los atributos necesarios, si hace falta …
 	StatusBar(Controller ctrl) {
 	_ctrl=ctrl;
 	time=0;
@@ -30,62 +33,59 @@ class StatusBar extends JPanel implements SimulatorObserver {
 	_ctrl.addObserver(this);
 	
 	
-	// TODO registrar this como observador
+	// registrar this como observador
 	}
 	private void initGUI() {
-	this.setLayout(new FlowLayout(FlowLayout.LEFT));
-	this.setBorder(BorderFactory.createBevelBorder(1));
-	// TODO Crear una etiqueta de tiempo y añadirla al panel
-	_tiempo= new JLabel("Time:   "+time);
-	add(_tiempo);
-	JSeparator s = new JSeparator(JSeparator.VERTICAL);
-	s.setPreferredSize(new Dimension(10, 20));
-	this.add(s);
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setBorder(BorderFactory.createBevelBorder(1));
+		// Crear una etiqueta de tiempo y añadirla al panel
+		_tiempo= new JLabel("Time:   "+time);
+		add(_tiempo);
+		JSeparator s = new JSeparator(JSeparator.VERTICAL);
+		s.setPreferredSize(new Dimension(10, 20));
+		this.add(s);
+		// TODO Crear la etiqueta de número de grupos y añadirla al panel
+		_grupos=new JLabel("Groups:   "+groups);
+		add(_grupos);
+			// Utilizar el siguiente código para añadir un separador vertical
 	
-	// TODO Crear la etiqueta de número de grupos y añadirla al panel
-	_grupos=new JLabel("Groups:   "+groups);
-	add(_grupos);
-	// TODO Utilizar el siguiente código para añadir un separador vertical
-	//
-	// JSeparator s = new JSeparator(JSeparator.VERTICAL);
-	// s.setPreferredSize(new Dimension(10, 20));
-	// this.add(s);
 	}
-	// TODO el resto de métodos van aquí…
-	@Override
+	// el resto de métodos van aquí…
+		@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
-		// TODO Auto-generated method stub
 		this.time+=time;
-		
+		_tiempo.setText("Time:   " + time);
 	}
+		
 	@Override
-	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
-		// TODO Auto-generated method stub
-		
+	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {			
+		this.time=0;
+		_tiempo.setText("Time:   " + this.time);
+		this.groups = 0;
+		_grupos.setText("Groups:   "+ this.groups);
 	}
+	
 	@Override
-	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {
-		// TODO Auto-generated method stub
-		
+	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {		
 	}
+	
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		this.groups++;
-		
+		_grupos.setText("Groups:   "+this.groups);
 	}
+
 	@Override
-	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {
-		// TODO Auto-generated method stub
-		
+	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {		
 	}
+
 	@Override
 	public void onDeltaTimeChanged(double dt) {
 		this.time=0;
-		
+		_tiempo.setText("Time:   " + this.time);
 	}
+	
 	@Override
 	public void onForceLawsChanged(BodiesGroup g) {
-		// TODO Auto-generated method stub
-		
 	}
-	}
+}

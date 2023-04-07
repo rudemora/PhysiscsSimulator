@@ -19,38 +19,49 @@ public class GroupsTableModel extends AbstractTableModel implements SimulatorObs
 	/**
 	 * 
 	 */
-	//private static final long serialVersionUID = 1L;
 	String[] _header = { "Id", "Force Laws", "Bodies" };
 	List<BodiesGroup> _groups;
 	private Controller _ctrl;
 	GroupsTableModel(Controller ctrl) {
-	_groups = new ArrayList<>();
-	_ctrl=ctrl;
-	_ctrl.addObserver(this);
-	// TODO registrar this como observador;
+		_groups = new ArrayList<>();
+		_ctrl=ctrl;
+		_ctrl.addObserver(this);
 	}
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _groups.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _header.length;
+	}
+	
+	@Override
+	public String getColumnName(int col) {
+		return _header[col];
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
+		switch(columnIndex) {
+		case 0: 
+			return _groups.get(rowIndex).getId();
+		case 1: 
+			return _groups.get(rowIndex).getForceLawsInfo();
+		case 2:
+			String st = " ";
+			for(Body b: _groups.get(rowIndex)) {
+				st+=b.getId() + " ";
+			}
+			return st;
+		}
 		return null;
 	}
 
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -75,7 +86,6 @@ public class GroupsTableModel extends AbstractTableModel implements SimulatorObs
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		_groups.add(g);
 		fireTableStructureChanged();
-		
 	}
 
 	@Override
@@ -85,20 +95,14 @@ public class GroupsTableModel extends AbstractTableModel implements SimulatorObs
 			_groups.add(b1);
 		}
 		fireTableStructureChanged();
-		
-		
 	}
 
 	@Override
-	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
+	public void onDeltaTimeChanged(double dt) {		
 	}
 
 	@Override
-	public void onForceLawsChanged(BodiesGroup g) {
-		// TODO Auto-generated method stub
-		
+	public void onForceLawsChanged(BodiesGroup g) {		
 	}
 	
 	

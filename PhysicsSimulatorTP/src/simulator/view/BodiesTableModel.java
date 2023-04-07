@@ -24,28 +24,43 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 	List<Body> _bodies;
 	private Controller _ctrl;
 	BodiesTableModel(Controller ctrl) {
-	_bodies = new ArrayList<>();
-	// TODO registrar this como observer
-	_ctrl=ctrl;
-	_ctrl.addObserver(this);
+		_bodies = new ArrayList<>();
+		_ctrl=ctrl;
+		_ctrl.addObserver(this);
 	}
 
 
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _bodies.size();
 	}
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _header.length;
 	}
 
 	@Override
+	public String getColumnName(int col) {
+		return _header[col];
+	}
+	
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
+		switch(columnIndex) {
+		case 0: 
+			return _bodies.get(rowIndex).getId();
+		case 1: 
+			return _bodies.get(rowIndex).getgId();
+		case 2:
+			return _bodies.get(rowIndex).getMass();
+		case 3:
+			return _bodies.get(rowIndex).getVelocity();
+		case 4:
+			return _bodies.get(rowIndex).getPosition();
+		case 5:
+			return _bodies.get(rowIndex).getForce();
+		}
 		return null;
 	}
 

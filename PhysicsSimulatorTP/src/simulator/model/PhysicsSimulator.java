@@ -126,6 +126,7 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		}
 		if (!inList) {
 			listObserver.add(o);
+			o.onRegister(mapRO, actualTime, dt);
 		}
 		
 	}

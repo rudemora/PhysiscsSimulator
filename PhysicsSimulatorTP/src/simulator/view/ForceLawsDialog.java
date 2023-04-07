@@ -17,6 +17,10 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 class ForceLawsDialog extends JDialog implements SimulatorObserver {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private DefaultComboBoxModel<String> _lawsModel;
 	private DefaultComboBoxModel<String> _groupsModel;
 	private JComboBox<String> _comboLaws;
@@ -31,12 +35,13 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	private JButton _cancel;
 	private boolean _status;
 	int _selectedLawsIndex;
-	// TODO en caso de ser necesario, añadir los atributos aquí…
+	
 	ForceLawsDialog(Frame parent, Controller ctrl) {
 		super(parent, true);
 		_ctrl = ctrl;
-		initGUI();
 		_ctrl.addObserver(this);
+		initGUI();
+		
 	}
 	private void initGUI() {
 		setTitle("Force Laws Selection");
@@ -44,9 +49,16 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		setContentPane(mainPanel);
 		// _forceLawsInfo se usará para establecer la información en la tabla
+		// help
+		JLabel help = new JLabel("<html><p>Select a force law and provide values for the parametes in the <b>Value column</b> (default values are used for parametes with no value).</p></html>");
+		help.setAlignmentX(CENTER_ALIGNMENT);
+		mainPanel.add(help);
+		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 		_forceLawsInfo = _ctrl.getForceLawsInfo();
-		// TODO crear un JTable que use _dataTableModel, y añadirla al panel
 		_dataTableModel = new DefaultTableModel() {
+			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				if(column==1) {
@@ -55,9 +67,6 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 				return false;
 			}
 		};
-			
-		
-		
 		_dataTableModel.setColumnIdentifiers(_headers);
 	
 		tbl= new JTable(_dataTableModel);
@@ -65,23 +74,19 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		mainPanel.add(scb);
 		_lawsModel = new DefaultComboBoxModel<>();
 		
-		// TODO añadir la descripción de todas las leyes de fuerza a _lawsModel
 		for(JSONObject j: _forceLawsInfo ) {
 			_lawsModel.addElement(j.getString("type"));
 		}
-		// TODO crear un combobox que use _lawsModel y añadirlo al panel
 		
 		_comboLaws= new JComboBox<String> (_lawsModel);
 		mainPanel.add(_comboLaws);
 		_comboLaws.addActionListener((e)->selectedLaw());
 		
-		// TODO crear un combobox que use _groupsModel y añadirlo al panel
 		_groupsModel = new DefaultComboBoxModel<>();
-		_comboGroups= new JComboBox<String> (_groupsModel);
+		_comboGroups= new JComboBox<String> (_groupsModel);		
 		mainPanel.add(_comboGroups);
 		
 		
-		// TODO crear los botones OK y Cancel y añadirlos al panel
 		_ok= new JButton("Ok");
 		_ok.addActionListener((e)->ok());
 		mainPanel.add(_ok);
@@ -137,7 +142,7 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	public boolean open() {
 		
-	//if (_groupsModel.getSize() == 0) //Es necesario comentarlo pq al ppio siempre pasa pq no estamos metiendo nada y nunca se pone set visible
+	if (_groupsModel.getSize() == 0) //Es necesario comentarlo pq al ppio siempre pasa pq no estamos metiendo nada y nunca se pone set visible
 		//return _status;// no se que pollas hace
 	// TODO Establecer la posición de la ventana de diálogo de tal manera que se
 	// abra en el centro de la ventana principal
@@ -150,7 +155,6 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	// TODO el resto de métodos van aquí…
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
@@ -159,33 +163,33 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		
 		
 	}
-	@Override
+	@Override //TODO seguir por aquí
 	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {//TODO no se que hace asi q ns si hay q hacer algo aqui
-		// TODO Auto-generated method stub
-		
+		_groupsModel = new DefaultComboBoxModel<>();
+		for(BodiesGroup b: groups.values()) {
+			_groupsModel.addElement(b.getId());
+		}
+		//_comboGroups= new JComboBox<String> (_groupsModel);		
+		//mainPanel.add(_comboGroups);
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		_groupsInfo.add(g);
-		
 		_groupsModel.addElement(g.getId());
 		
-		//TODO ahora para que se actualice en la combobox no se si borrarla y bOLBER a crear otra o q
+		//TODO ahora para que se actualice en la combobox no se si borrarla y volver a crear otra o q
 		
 	}
 	@Override
 	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {
-		
-		
+				
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void onForceLawsChanged(BodiesGroup g) {
-		// TODO Auto-generated method stub
 		
 	}
 }

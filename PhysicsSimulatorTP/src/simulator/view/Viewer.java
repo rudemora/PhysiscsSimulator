@@ -110,7 +110,7 @@ class Viewer extends SimulationViewer {
 			 * luego llame a repaint(). Esto hará que se muestre/oculte el texto de ayuda -
 			 * ver método paintComponent
 			 * 
-			 * TODO
+			 * 
 			 * 
 			 * ES: gestiona la tecla 'v' para cambiar el valor de _showVectors a
 			 * !_showVectors, y luego llame a repaint(). Tienes que usar esta variable en
@@ -170,6 +170,7 @@ class Viewer extends SimulationViewer {
 				case 'v':
 					_showVectors = !_showVectors;
 					repaint();
+					break;
 				case 'g':
 					_selectedGroupIdx = _selectedGroupIdx + 1;
 					if (_selectedGroupIdx == _groups.size()) {
@@ -181,6 +182,7 @@ class Viewer extends SimulationViewer {
 					else {
 						_selectedGroup = _groups.get(_selectedGroupIdx).getId();
 					}
+					repaint();
 					break;
 				default:
 				}
@@ -227,7 +229,7 @@ class Viewer extends SimulationViewer {
 		_centerX = getWidth() / 2 - _originX;
 		_centerY = getHeight() / 2 - _originY;
 
-		// TODO draw red cross at (_centerX,_centerY)
+		// draw red cross at (_centerX,_centerY)
 		gr.setColor(Color.RED);
 		gr.drawLine(_centerX - 5, _centerY, _centerX + 5, _centerY);
 		gr.drawLine(_centerX, _centerY  - 5, _centerX, _centerY + 5);
@@ -242,15 +244,7 @@ class Viewer extends SimulationViewer {
 
 	private void showHelp(Graphics2D g) {
 		/*
-		 * TODO
 		 * 
-		 * EN: complete to show the following text on the top-left corner:
-		 * 
-		 * h: toggle help, v: toggle vectors, +: zoom-in, -: zoom-out, =: fit //
-		 * l: move right, j: move left, i: move up, m: move down: k: reset 
-		 * g: show next group
-		 * Scaling ratio: ... 
-		 * Selected Group: ...
 		 * 
 		 * ES: completa el método para que muestre el siguiente texto en la esquina
 		 * superior izquierda:
@@ -262,21 +256,23 @@ class Viewer extends SimulationViewer {
 		 * Selected Group: ...
 		 * 
 		 */
+		g.setColor(Color.RED);
+		g.drawString("h: toggle help, v: toggle vectors, +: zoom-in, -: zoom-out, =: fit ", 10, 15);
+		g.drawString("g: show next group", 10, 30);
+		g.drawString("l: move right, j: move left, i: move up, m: move down: k: reset", 10, 45);
+		g.drawString("Scaling ratio: " + _scale, 10, 60); 
+		g.setColor(Color.BLUE);
+		if (_selectedGroup == null) {
+			g.drawString("Selected group: all", 10, 75); //TODO un poco feo el if
+		}
+		else {
+			g.drawString("Selected group: " + _selectedGroup, 10, 75); 
+		}
 		
 	}
 
 	private void drawBodies(Graphics2D g) {
 		/*
-		 * TODO
-		 * 
-		 * EN: draw all bodies for which isVisible(b) return 'true' (see isVisible
-		 * below, it returns true if the body belongs to the selected group). For each
-		 * body, you should draw the velocity and force vectors if _showVectors is true.
-		 * Use method drawLineWithArrow to draw the vectors. The color of body 'b'
-		 * should be _gColor.get(b.getgId()) -- see method addGroup below. You should
-		 * assume that the origin point is (_centerX,_centerY), and recall to divide the
-		 * coordinates of the body by the value of _scale.
-		 * 
 		 * 
 		 * ES: Dibuja todos los cuerpos para los que isVisible(b) devuelve 'true' (ver
 		 * isVisible abajo, devuelve 'true' si el cuerpo pertenece al grupo
@@ -288,17 +284,32 @@ class Viewer extends SimulationViewer {
 		 * valor de _scale.
 		 * 
 		 */
+		for (Body b: _bodies) {
+			if (isVisible(b)) {
+				g.setColor(_gColor.get(b.getgId()));
+				int componenteX = (int) (_centerX + b.getPosition().getX()/_scale);
+				int componenteY = (int) (_centerY + b.getPosition().getY()/_scale);
+				g.fillOval(componenteX, componenteY, 10, 10);
+				g.setColor(Color.BLACK);
+				g.drawString(b.getId(), componenteX, componenteY - 5);
+				if (_showVectors) {
+					drawLineWithArrow(g, componenteX + (int) b.getVelocity().direction().getX(), componenteY + (int) b.getVelocity().direction().getY(), componenteX, componenteY, 10, 10, Color.GREEN, Color.GREEN );
+					//drawLineWithArrow(g, componenteX, componenteY, componenteX + (int) b.getForce().direction().getX()/_scale, componenteY + (int) b.getForce().direction().getY()/_scale, 5, 7, Color.RED, Color.RED );
+					//drawLineWithArrow(g, _centerX, _centerY, _centerX + 10, _centerY + 10, 1,5, Color.blue,Color.blue);
+				}
+			}
+		}
 	}
 
 	private boolean isVisible(Body b) {
 		/*
-		 * TODO 
-		 * 
-		 * EN: return true if _selectedGroup is null or equal to b.getgId() 
 		 * 
 		 * ES: devuelve true si _selectedGroup es null o igual a b.getgId()
 		 *
 		 */
+		if (_selectedGroup == null || _selectedGroup.equals(b.getgId())) {
+			return true;
+		}
 		return false;
 	}
 
@@ -321,13 +332,16 @@ class Viewer extends SimulationViewer {
 	@Override
 	public void addGroup(BodiesGroup g) {
 		/*
-		 * TODO
 		 * 
 		 * EN: add g to _groups and its bodies to _bodies
 		 *
 		 * ES: añadir g a _groups y sus cuerpos a _bodies
 		 * 
 		 */
+		_groups.add(g);
+		for(Body b: g) {
+			addBody(b);
+		}
 		_gColor.put(g.getId(), _colorGen.nextColor()); // assign color to group
 		autoScale();
 		update();
@@ -336,13 +350,13 @@ class Viewer extends SimulationViewer {
 	@Override
 	public void addBody(Body b) {
 		/*
-		 * TODO
 		 * 
 		 *  EN: add b to _bodies
 		 *  
 		 *  ES: añadir b a _bodies
 		 *  
 		 */
+		_bodies.add(b);
 		autoScale();
 		update();
 	}
@@ -350,7 +364,6 @@ class Viewer extends SimulationViewer {
 	@Override
 	public void reset() {
 		/*
-		 * TODO
 		 * 
 		 * EN: clear the group list, bodies list, and the colors map
 		 * 
@@ -358,6 +371,9 @@ class Viewer extends SimulationViewer {
 		 * el mapa de colores
 		 * 
 		 */
+		_groups.clear();
+		_bodies.clear();
+		_gColor.clear();
 		_colorGen.reset(); // reset the color generator
 		_selectedGroupIdx = -1;
 		_selectedGroup = null;

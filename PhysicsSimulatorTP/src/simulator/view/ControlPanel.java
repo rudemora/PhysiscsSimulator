@@ -15,12 +15,16 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;//Importado por mi
 import javax.swing.JPanel;
 import javax.swing.JSpinner;//Importado por mi
 import javax.swing.JTextField;//Importado por mi
 import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import simulator.control.Controller;
 import simulator.model.BodiesGroup;
@@ -29,6 +33,7 @@ import simulator.model.SimulatorObserver;
 
 public class ControlPanel extends JPanel implements SimulatorObserver {
 
+	private static final long serialVersionUID = 1L;
 	private Controller _ctrl;
 	private JToolBar _toolaBar;
 	private JFileChooser _fc;
@@ -44,11 +49,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	private JTextField _dt;
 	private JLabel _nombreSpinner;
 	private JLabel _nombreTextField;
-	// TODO añade más atributos aquí …
+	private ViewerWindow _viewer;
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
 		initGUI();
-		// TODO registrar this como observador
 		ctrl.addObserver(this);
 	
 	}
@@ -56,16 +60,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		setLayout(new BorderLayout());
 		_toolaBar = new JToolBar();
 		add(_toolaBar, BorderLayout.PAGE_START);
-		// TODO crear los diferentes botones/atributos y añadirlos a _toolaBar.
-		// Todos ellos han de tener su correspondiente tooltip. Puedes utilizar
+		// crear los diferentes botones/atributos y añadirlos a _toolaBar.
+		// Todos ellos han de tener su correspondiente tooltip TODO . Puedes utilizar
 		// _toolaBar.addSeparator() para añadir la línea de separación vertical
 		// entre las componentes que lo necesiten
 		
 		
-		// TODO crear el selector de ficheros
+		// crear el selector de ficheros
 		// Selector ficheros
-		
-		
 		_fc=new JFileChooser();
 		_toolaBar.addSeparator();
 		_loadButton = new JButton();
@@ -73,45 +75,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
 		_loadButton.addActionListener((e)-> gestorFile());
 		_toolaBar.add(_loadButton);
-		
-		
-		/*class GestorFile extends JFileChooser implements ActionListener{
-			private static final long serialVersionUID = 1L;
-			JFileChooser _fc;
-			public GestorFile() {
-				_toolaBar.addSeparator();
-				_loadButton = new JButton();
-				_loadButton.setToolTipText("Load an input file into the simulator");
-				_loadButton.setIcon(new ImageIcon("resources/icons/open.png"));
-				_loadButton.addActionListener(this);
-				_toolaBar.add(_loadButton,FlowLayout.LEFT);
-			
-			}
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_fc.showOpenDialog(Utils.getWindow(this));//No creo q sea asi, deberia abrirse desde utils y su metodo estatico no?
-				int ret=_fc.showOpenDialog(_fc);
-				if(ret==JFileChooser.APPROVE_OPTION) {
-					//_ctrl.reset();
-					//falta cargar el fichero seleccionado en el simulador
-					System.out.println("lolol");
-				}
-				
-				
-			}
-		}
-		_fc = new GestorFile();
-		/*class GestorFile implements ActionListener {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int res = _fc.showOpenDialog(Utils.getWindow(this));
-			}
-			
-		}*/
-		//GestorFile gestorFileChooser = new GestorFile();
-		//_loadButton.addActionListener(gestorFileChooser);
-		
 		
 		//ForceLaws
 		_toolaBar.addSeparator();
@@ -154,13 +117,26 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_nombreSpinner=new JLabel("Steps:");
 		_toolaBar.add(_nombreSpinner);
 		_toolaBar.addSeparator();
-		_pasosSimulacion= new JSpinner();//Esto no se si deberia estar siempre o cuando se pulsa el boton
+		_pasosSimulacion= new JSpinner(new SpinnerNumberModel(10000, 0, 999999,100));
+		_nombreSpinner.setToolTipText("Simulation steps to run: 1 - " + 10000);
+		_pasosSimulacion.setMinimumSize(new Dimension(50,50));
+		_pasosSimulacion.setMaximumSize(new Dimension(50,50));
+		_pasosSimulacion.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				_nombreSpinner.setToolTipText("Simulation steps to run: 1 - " + _pasosSimulacion.getValue());
+			}
+		});
 		_toolaBar.add(_pasosSimulacion);
 		_toolaBar.addSeparator();
+		
 		_nombreTextField= new JLabel("Delta_Time:");
+		_nombreTextField.setToolTipText("Real time (seconds) corresponding to a step");
 		_toolaBar.add(_nombreTextField);
-		_dt=new JTextField();
+		_dt=new JTextField("2500.0");
 		_dt.setPreferredSize(new Dimension(70, 25));
+		_dt.setMinimumSize(new Dimension(100,100));
+		_dt.setMaximumSize(new Dimension(100,100));
 		_toolaBar.add(_dt);
 		
 		// Quit Button
@@ -190,8 +166,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 				_ctrl.reset();
 				InputStream in= new FileInputStream(_fc.getSelectedFile());
 				_ctrl.loadData(in);
-				System.out.println("lolol");
-				
 			}catch(Exception e){
 				
 				Utils.showErrorMsg("Error in gestorFile");
@@ -204,16 +178,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	}
 	private void force() {
 		if(_force==null) {
-			
 			_force=new ForceLawsDialog(new Frame("Force Laws Selection"),_ctrl);//TODO ñapa
 		}
-		
 		_force.open();
 	}
 	
 	private void open() {
-		// TODO Auto-generated method stub
-		
+		// TODO 
+		_viewer = new ViewerWindow(new JFrame(), _ctrl);
 	}
 	private void run() {
 		
@@ -238,32 +210,29 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	
 	private void run_sim(int n) {
 		if (n > 0 && !_stopped) {
-		try {
-		_ctrl.run(1);
-		} catch (Exception e) {
-		// TODO llamar a Utils.showErrorMsg con el mensaje de error que
-		// corresponda
-		Utils.showErrorMsg("Error en el run_sim");
+			try {
+			_ctrl.run(1);
+			} catch (Exception e) {
+			Utils.showErrorMsg("Error en el run_sim");
+			
+			_loadButton.setEnabled(true);
+			_forceButton.setEnabled(true);
+			_openButton.setEnabled(true);
+			_runButton.setEnabled(true);
+			_stopped = true;
+			return;
+			}
+			SwingUtilities.invokeLater(() -> run_sim(n - 1));
+		} 
+		else {
+			// TODO llamar a Utils.showErrorMsg con el mensaje de error que
+			_loadButton.setEnabled(true);
+			_forceButton.setEnabled(true);
+			_openButton.setEnabled(true);
+			_runButton.setEnabled(true);
+			_stopped = true;
+		}
 		
-		_loadButton.setEnabled(true);
-		_forceButton.setEnabled(true);
-		_openButton.setEnabled(true);
-		_runButton.setEnabled(true);
-		_stopped = true;
-		return;
-		}
-		SwingUtilities.invokeLater(() -> run_sim(n - 1));
-		} else {
-		// TODO llamar a Utils.showErrorMsg con el mensaje de error que
-		// corresponda
-		Utils.showErrorMsg("Vamos rojillos");
-		_loadButton.setEnabled(true);
-		_forceButton.setEnabled(true);
-		_openButton.setEnabled(true);
-		_runButton.setEnabled(true);
-		_stopped = true;
-		_stopped = true;
-		}
 		}
 
 	@Override
@@ -287,7 +256,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

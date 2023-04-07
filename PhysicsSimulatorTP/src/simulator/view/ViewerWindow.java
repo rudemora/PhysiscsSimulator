@@ -15,6 +15,7 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 class ViewerWindow extends JFrame implements SimulatorObserver {
+	private static final long serialVersionUID = 1L;
 	private Controller _ctrl;
 	private SimulationViewer _viewer;
 	private JFrame _parent;
@@ -23,7 +24,6 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 		_ctrl = ctrl;
 		_parent = parent;
 		intiGUI();
-		// TODO registrar this como observador
 		_ctrl.addObserver(this);
 	}
 	private void intiGUI() {
@@ -33,51 +33,37 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 		setContentPane(scp);
 		// TODO crear el viewer y añadirlo a mainPanel (en el centro)
 		_viewer= new Viewer();
+		mainPanel.add(_viewer, BorderLayout.CENTER);
 		// TODO en el método windowClosing, eliminar ‘this’ de los observadores
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				
 				_ctrl.removeObserver(ViewerWindow.this);//TODO pa q ruben se quede tranquilo
-				
 			}
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
-			public void windowClosed(WindowEvent e) {
-				
-				
+			public void windowClosed(WindowEvent e) {				
 			}
 
 			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void windowIconified(WindowEvent e) {				
 			}
 
 			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void windowDeiconified(WindowEvent e) {				
 			}
 
 			@Override
 			public void windowActivated(WindowEvent e) {
-				
 			}
 
 			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void windowDeactivated(WindowEvent e) {				
 			}
-
-			
 		});
 		pack();
 		if (_parent != null)
@@ -113,16 +99,13 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 		_viewer.addBody(b);
 		
 	}
+	
 	@Override
-	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
+	public void onDeltaTimeChanged(double dt) {		
 	}
+	
 	@Override
 	public void onForceLawsChanged(BodiesGroup g) {
-		// TODO Auto-generated method stub
-		
 	}
-	// TODO otros métodos van aquí….
 }
 

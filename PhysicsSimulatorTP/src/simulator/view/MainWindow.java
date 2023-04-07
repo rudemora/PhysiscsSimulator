@@ -21,17 +21,17 @@ public class MainWindow extends JFrame {
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		setContentPane(mainPanel);
-		// TODO crear ControlPanel y añadirlo en PAGE_START de mainPanel
+		// crear ControlPanel y añadirlo en PAGE_START de mainPanel
 		ControlPanel cp = new ControlPanel(_ctrl);
 		mainPanel.add(cp, BorderLayout.PAGE_START);
-		// TODO crear StatusBar y añadirlo en PAGE_END de mainPanel
+		// crear StatusBar y añadirlo en PAGE_END de mainPanel
 		StatusBar sb = new StatusBar(_ctrl);
 		mainPanel.add(sb, BorderLayout.PAGE_END);
 		// Definición del panel de tablas (usa un BoxLayout vertical)
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(contentPanel, BorderLayout.CENTER);
-		// TODO crear la tabla de grupos y añadirla a contentPanel.
+		// crear la tabla de grupos y añadirla a contentPanel.
 		// Usa setPreferredSize(new Dimension(500, 250)) para fijar su tamaño
 		InfoTable tg= new InfoTable("Groups", new GroupsTableModel(_ctrl));
 		tg.setPreferredSize(new Dimension(500,250));
