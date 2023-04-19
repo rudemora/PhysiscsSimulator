@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+
 import simulator.misc.Vector2D;
 import simulator.model.BodiesGroup;
 import simulator.model.Body;
@@ -78,7 +80,6 @@ class Viewer extends SimulationViewer {
 		// The preferred and minimum size of the components
 		setMinimumSize(new Dimension(_WIDTH, _HEIGHT));
 		setPreferredSize(new Dimension(_WIDTH, _HEIGHT));
-
 		// add a key listener to handle the user actions
 		addKeyListener(new KeyListener() {
 
@@ -293,9 +294,8 @@ class Viewer extends SimulationViewer {
 				g.setColor(Color.BLACK);
 				g.drawString(b.getId(), componenteX, componenteY - 5);
 				if (_showVectors) {
-					drawLineWithArrow(g, componenteX + (int) b.getVelocity().direction().getX(), componenteY + (int) b.getVelocity().direction().getY(), componenteX, componenteY, 10, 10, Color.GREEN, Color.GREEN );
-					//drawLineWithArrow(g, componenteX, componenteY, componenteX + (int) b.getForce().direction().getX()/_scale, componenteY + (int) b.getForce().direction().getY()/_scale, 5, 7, Color.RED, Color.RED );
-					//drawLineWithArrow(g, _centerX, _centerY, _centerX + 10, _centerY + 10, 1,5, Color.blue,Color.blue);
+					drawLineWithArrow(g, componenteX + 5, componenteY + 5, componenteX + (int) b.getVelocity().direction().scale(40).getX(), componenteY + (int) b.getVelocity().direction().scale(40).getY(), 5, 5, Color.GREEN, Color.GREEN );
+					drawLineWithArrow(g, componenteX + 5, componenteY + 5,componenteX + (int) b.getForce().direction().scale(40).getX(), componenteY + (int) b.getForce().direction().scale(40).getY(), 5, 5, Color.RED, Color.RED );
 				}
 			}
 		}

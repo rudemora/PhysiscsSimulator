@@ -3,15 +3,18 @@ package simulator.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import simulator.control.Controller;
+import simulator.misc.Vector2D;
 import simulator.model.BodiesGroup;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
@@ -56,9 +59,7 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 		_forceLawsInfo = _ctrl.getForceLawsInfo();
 		_dataTableModel = new DefaultTableModel() {
-			
 			private static final long serialVersionUID = 1L;
-
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				if(column==1) {
@@ -80,13 +81,8 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		
 		_comboLaws= new JComboBox<String> (_lawsModel);
 		mainPanel.add(_comboLaws);
-		_comboLaws.addActionListener((e)->selectedLaw());
-		
-		_groupsModel = new DefaultComboBoxModel<>();
-		_comboGroups= new JComboBox<String> (_groupsModel);		
+		_comboLaws.addActionListener((e)->selectedLaw());	
 		mainPanel.add(_comboGroups);
-		
-		
 		_ok= new JButton("Ok");
 		_ok.addActionListener((e)->ok());
 		mainPanel.add(_ok);
@@ -111,7 +107,6 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 			String[] row= {key,"",data.getString(key)};
 			_dataTableModel.addRow(row);
 			k++;
-			
 		}
 		_dataTableModel.fireTableRowsInserted(0,k);
 		
@@ -123,15 +118,36 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	private void ok() {
 		//ahora falta actualizar los cambios en el grupo
+		//_dataTableModel.fireTableDataChanged();
+
 		try {
 			JSONObject data=new JSONObject();
 			for(int i=0;i<_dataTableModel.getRowCount();i++) {
-				
-				data.put( _dataTableModel.getValueAt(i, 0).toString(),_dataTableModel.getValueAt(i, 1));
-			}
+				if (_dataTableModel.getValueAt(i,1).toString().charAt(0) == '[') {
+					String[] aux = _dataTableModel.getValueAt(i,1).toString().split(",");
+					//_dataTableModel.getValueAt(i, 1).toString();
+					String componenteX = "";
+					String componenteY = "";
+					for(int j = 1; j < aux[0].length(); j++) {
+						componenteX += aux[0].charAt(j);
+					}
+					for(int j = 0; j < aux[1].length() - 1; j++) {
+						componenteY += aux[1].charAt(j);
+					}
+					JSONArray vector = new JSONArray();
+					vector.put(Double.parseDouble(componenteX));
+					vector.put(Double.parseDouble(componenteY));
+					data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
+				}
+				else {
+					data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
+					
+				}
+		    }
 			JSONObject type= new JSONObject();
 			type.put("data", data);
 			type.put("type", _forceLawsInfo.get(_selectedLawsIndex).getString("type"));
+			_groupsInfo.get(_comboGroups.getSelectedIndex()).getId();
 			_ctrl.setForceLaws(_groupsInfo.get(_comboGroups.getSelectedIndex()).getId(), type);
 			_status=true;
 			setVisible(false);
@@ -152,7 +168,6 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		setVisible(true);
 		return _status;
 	}
-	// TODO el resto de métodos van aquí…
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
 		
@@ -160,16 +175,21 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	@Override
 	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
 		_comboGroups.removeAll();
-		
-		
 	}
 	@Override //TODO seguir por aquí
 	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {//TODO no se que hace asi q ns si hay q hacer algo aqui
+		//_groupsModel = new DefaultComboBoxModel<>();
 		_groupsModel = new DefaultComboBoxModel<>();
+		_groupsInfo = new ArrayList<BodiesGroup>();
+		_comboGroups= new JComboBox<String> (_groupsModel);		
 		for(BodiesGroup b: groups.values()) {
-			_groupsModel.addElement(b.getId());
+			//_groupsModel.addElement(b.getId());
+			//_comboLaws.addItem(b.getId());;
+			_comboGroups.addItem(b.getId());
+			_groupsInfo.add(b);
 		}
-		//_comboGroups= new JComboBox<String> (_groupsModel);		
+		
+			
 		//mainPanel.add(_comboGroups);
 	}
 	@Override

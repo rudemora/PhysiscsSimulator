@@ -101,10 +101,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_toolaBar.add(_runButton);
 		_toolaBar.addSeparator();
 		
-		
-		
-		
-		
+
 		//Stop Button
 		_toolaBar.addSeparator();
 		_stopButton = new JButton(); //crear boton
@@ -186,6 +183,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 	private void open() {
 		// TODO 
 		_viewer = new ViewerWindow(new JFrame(), _ctrl);
+		_viewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //TODO he añadido esto pero al cerrar la ventana de viewer da error, creo que porque sigue de observador
 	}
 	private void run() {
 		
