@@ -10,21 +10,20 @@ import simulator.model.NewtonUniversalGravitation;
 
 public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 
+	private static final double G = 6.67e-11;
+	
 	public NewtonUniversalGravitationBuilder() {
 		super("nlug", "Newton's law of universal gravitation");
 	}
 
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
+		double G = this.G;
 		if(data.has("G")) {
-			double G=data.getDouble("G");
-			NewtonUniversalGravitation b=new NewtonUniversalGravitation(G);
-			return b;
+			G=data.getDouble("G");
 		}
-		else {
-			NewtonUniversalGravitation b=new NewtonUniversalGravitation();
-			return b;
-		}
+		NewtonUniversalGravitation b=new NewtonUniversalGravitation(G);
+		return b;
 	}
 
 	
@@ -38,7 +37,7 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws> {
 	
 	private String fillInData() {
 		return " {\r\n"
-				+ "\"G\": \"the gravitational constant (a number)\"\r\n"
+				+ "\"G\": \"Gravitational constant, e.g., 6.67e-11\"\r\n"
 				+ "}\r\n"
 				+ " ";
 	}

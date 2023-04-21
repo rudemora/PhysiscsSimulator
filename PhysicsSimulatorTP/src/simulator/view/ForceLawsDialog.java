@@ -99,14 +99,19 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		_selectedLawsIndex= _comboLaws.getSelectedIndex();
 		JSONObject info= _forceLawsInfo.get(_selectedLawsIndex);
 		JSONObject data= info.getJSONObject("data");
-		for(int j=0; j<_dataTableModel.getRowCount();j++) {
-			_dataTableModel.removeRow(j);
+		int j = 0;
+		int tamano = _dataTableModel.getRowCount();
+		for(j=0; j<tamano;j++) {
+			_dataTableModel.removeRow(0);
+			
 		}
+		
 		int k=0;
 		for(String key: data.keySet()) {
 			String[] row= {key,"",data.getString(key)};
 			_dataTableModel.addRow(row);
 			k++;
+			
 		}
 		_dataTableModel.fireTableRowsInserted(0,k);
 		
@@ -123,25 +128,36 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		try {
 			JSONObject data=new JSONObject();
 			for(int i=0;i<_dataTableModel.getRowCount();i++) {
-				if (_dataTableModel.getValueAt(i,1).toString().charAt(0) == '[') {
-					String[] aux = _dataTableModel.getValueAt(i,1).toString().split(",");
-					//_dataTableModel.getValueAt(i, 1).toString();
-					String componenteX = "";
-					String componenteY = "";
-					for(int j = 1; j < aux[0].length(); j++) {
-						componenteX += aux[0].charAt(j);
+				if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'c') {
+					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
+						String[] aux = _dataTableModel.getValueAt(i,1).toString().split(",");
+						//_dataTableModel.getValueAt(i, 1).toString();
+						String componenteX = "";
+						String componenteY = "";
+						for(int j = 1; j < aux[0].length(); j++) {
+							componenteX += aux[0].charAt(j);
+						}
+						for(int j = 0; j < aux[1].length() - 1; j++) {
+							componenteY += aux[1].charAt(j);
+						}
+						JSONArray vector = new JSONArray();
+						vector.put(Double.parseDouble(componenteX));
+						vector.put(Double.parseDouble(componenteY));
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
 					}
-					for(int j = 0; j < aux[1].length() - 1; j++) {
-						componenteY += aux[1].charAt(j);
+				}
+				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'g') {
+					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
 					}
-					JSONArray vector = new JSONArray();
-					vector.put(Double.parseDouble(componenteX));
-					vector.put(Double.parseDouble(componenteY));
-					data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
+				}
+				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'G') {
+					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
+					}
 				}
 				else {
 					data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
-					
 				}
 		    }
 			JSONObject type= new JSONObject();

@@ -9,7 +9,8 @@ import simulator.model.NewtonUniversalGravitation;
 
 public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 
-	
+	private static final double g = 9.81;
+	private static final Vector2D c = new Vector2D(1.e10, 1.4e10);
 	
 	public MovingTowardsFixedPointBuilder() {
 		super("mtfp", "Moving towards a fixed point");
@@ -17,8 +18,8 @@ public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 
 	@Override
 	protected ForceLaws createInstance(JSONObject data) {
-		double g=9.81;
-		Vector2D c=new Vector2D();
+		double g= this.g;
+		Vector2D c= this.c;
 		if(data.has("g")) {
 			g=data.getDouble("g");
 		}
@@ -39,8 +40,8 @@ public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 	
 	private String fillInData() {
 		return "{\r\n"
-				+ "\"c\": \"the point towards which bodies move (e.g., [100.0,50.0])\",\r\n"
-				+ "\"g\": \"the length of the acceleration vector (a number)\"\r\n"
+				+ "\"c\": \"A 2D vector, e.g., [1e14, 1.4e10]\",\r\n"
+				+ "\"g\": \"Acceleration towards the fixpoint, e.g., 9,8\"\r\n"
 				+ "}\r\n"
 				+ " ";
 	}
