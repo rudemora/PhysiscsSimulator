@@ -28,17 +28,14 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 	}
 	private void intiGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		// TODO poner contentPane como mainPanel con scrollbars (JScrollPane)
 		JScrollPane scp= new JScrollPane(mainPanel);
 		setContentPane(scp);
-		// TODO crear el viewer y añadirlo a mainPanel (en el centro)
 		_viewer= new Viewer();
 		mainPanel.add(_viewer, BorderLayout.CENTER);
-		// TODO en el método windowClosing, eliminar ‘this’ de los observadores
+		
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				_ctrl.removeObserver(ViewerWindow.this);//TODO pa q ruben se quede tranquilo
 			}
 			
 			@Override
@@ -70,6 +67,7 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 			setLocation(
 					_parent.getLocation().x + _parent.getWidth()/2 - getWidth()/2,
 					_parent.getLocation().y + _parent.getHeight()/2 - getHeight()/2);
+		setLocation(100, 100);
 		setVisible(true);
 	}
 	@Override
@@ -79,7 +77,7 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 	}
 	@Override
 	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
-		_viewer.reset();//TODO ruben quiere añadir un grupo
+		_viewer.reset();
 		
 	}
 	@Override

@@ -44,7 +44,7 @@ class StatusBar extends JPanel implements SimulatorObserver {
 		JSeparator s = new JSeparator(JSeparator.VERTICAL);
 		s.setPreferredSize(new Dimension(10, 20));
 		this.add(s);
-		// TODO Crear la etiqueta de número de grupos y añadirla al panel
+		
 		_grupos=new JLabel("Groups:   "+groups);
 		add(_grupos);
 			// Utilizar el siguiente código para añadir un separador vertical

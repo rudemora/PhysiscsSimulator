@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -16,10 +18,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;//Importado por mi
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;//Importado por mi
-import javax.swing.JTextField;//Importado por mi
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
@@ -60,10 +62,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		setLayout(new BorderLayout());
 		_toolaBar = new JToolBar();
 		add(_toolaBar, BorderLayout.PAGE_START);
-		// crear los diferentes botones/atributos y añadirlos a _toolaBar.
-		// Todos ellos han de tener su correspondiente tooltip TODO . Puedes utilizar
-		// _toolaBar.addSeparator() para añadir la línea de separación vertical
-		// entre las componentes que lo necesiten
+
 		
 		
 		// crear el selector de ficheros
@@ -144,19 +143,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		_quitButton.setIcon(new ImageIcon("resources/icons/exit.png")); //imagen del boton
 		_quitButton.addActionListener((e) -> Utils.quit(this)); 
 		_toolaBar.add(_quitButton);
+		
+		
 	}
 	
 	
-	
-
-	
-	
-	
-
-
-	
 	private void gestorFile() {
-		
 		int ret=_fc.showOpenDialog(_fc);
 		if(ret==JFileChooser.APPROVE_OPTION) {
 			try {
@@ -166,24 +158,18 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 			}catch(Exception e){
 				
 				Utils.showErrorMsg("Error in gestorFile");
-			}
-			
-		
-			
-			
+			}			
 		}
 	}
 	private void force() {
 		if(_force==null) {
-			_force=new ForceLawsDialog(new Frame("Force Laws Selection"),_ctrl);//TODO ñapa
+			_force=new ForceLawsDialog(new Frame("Force Laws Selection"),_ctrl);
 		}
 		_force.open();
 	}
 	
 	private void open() {
-		// TODO 
 		_viewer = new ViewerWindow(new JFrame(), _ctrl);
-		_viewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //TODO he añadido esto pero al cerrar la ventana de viewer da error, creo que porque sigue de observador
 	}
 	private void run() {
 		
@@ -195,7 +181,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 		try {
 			double dt= Double.parseDouble(_dt.getText());
 			_ctrl.setDeltaTime(dt);
-			Integer n= (Integer) _pasosSimulacion.getValue();//HE HECHO CASTTTTTTTTTTTT PERO CREO Q NO HAY OTRA FORMA, O NO SE ME OCURRE
+			Integer n= (Integer) _pasosSimulacion.getValue();
 			run_sim(n);
 		}catch(Exception e){
 			Utils.showErrorMsg("Error en el run");
@@ -223,7 +209,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 			SwingUtilities.invokeLater(() -> run_sim(n - 1));
 		} 
 		else {
-			// TODO llamar a Utils.showErrorMsg con el mensaje de error que
 			_loadButton.setEnabled(true);
 			_forceButton.setEnabled(true);
 			_openButton.setEnabled(true);
@@ -235,42 +220,35 @@ public class ControlPanel extends JPanel implements SimulatorObserver {
 
 	@Override
 	public void onAdvance(Map<String, BodiesGroup> groups, double time) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		//No entiendo que piden
+
 	}
 
 	@Override
 	public void onForceLawsChanged(BodiesGroup g) {
-		// TODO Auto-generated method stub
 		
 	}
 	

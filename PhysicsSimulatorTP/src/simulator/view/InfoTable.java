@@ -36,7 +36,7 @@ public class InfoTable extends JPanel{
 		tbl.setShowGrid(false);
 		JScrollPane scb= new JScrollPane(tbl);
 		this.add(scb);
-		//TODO pensar en setvisible(boolean)
+		
 		
 	}
 	

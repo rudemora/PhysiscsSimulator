@@ -2,6 +2,7 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,28 +73,40 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	
 		tbl= new JTable(_dataTableModel);
 		JScrollPane scb= new JScrollPane(tbl);
-		mainPanel.add(scb);
+		mainPanel.add(scb, BorderLayout.NORTH);
 		_lawsModel = new DefaultComboBoxModel<>();
 		
 		for(JSONObject j: _forceLawsInfo ) {
-			_lawsModel.addElement(j.getString("type"));
+			_lawsModel.addElement(j.getString("desc"));
 		}
-		
+		JPanel panel1 = new JPanel(new FlowLayout());
+		JPanel panel2 = new JPanel(new FlowLayout());
+		JLabel label1 = new JLabel("Force law: ");
+		JLabel label2 = new JLabel("Group: ");
 		_comboLaws= new JComboBox<String> (_lawsModel);
-		mainPanel.add(_comboLaws);
+		panel1.add(label1);
+		panel1.add(new JSeparator(JSeparator.VERTICAL));
+		panel1.add(_comboLaws);
 		_comboLaws.addActionListener((e)->selectedLaw());	
-		mainPanel.add(_comboGroups);
-		_ok= new JButton("Ok");
-		_ok.addActionListener((e)->ok());
-		mainPanel.add(_ok);
+		panel1.add(new JSeparator(JSeparator.VERTICAL));
+		panel1.add(label2);
+		panel1.add(new JSeparator(JSeparator.VERTICAL));
+		panel1.add(_comboGroups);
 		_cancel= new JButton("Cancel");
 		_cancel.addActionListener((e)->cancel());
-		mainPanel.add(_cancel);
+		panel2.add(_cancel);
+		panel2.add(new JSeparator(JSeparator.VERTICAL));
+		_ok= new JButton("Ok");
+		_ok.addActionListener((e)->ok());
+		panel2.add(_ok);
+		
+
+		mainPanel.add(panel1, BorderLayout.CENTER);
+		mainPanel.add(panel2, BorderLayout.SOUTH);
 		setPreferredSize(new Dimension(700, 400));
 		pack();
 		setResizable(false);
 		setVisible(false);
-		//TODO faltan las labels
 	}
 	private void selectedLaw() {
 		_selectedLawsIndex= _comboLaws.getSelectedIndex();
@@ -122,16 +135,12 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 		
 	}
 	private void ok() {
-		//ahora falta actualizar los cambios en el grupo
-		//_dataTableModel.fireTableDataChanged();
-
 		try {
 			JSONObject data=new JSONObject();
 			for(int i=0;i<_dataTableModel.getRowCount();i++) {
 				if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'c') {
 					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
 						String[] aux = _dataTableModel.getValueAt(i,1).toString().split(",");
-						//_dataTableModel.getValueAt(i, 1).toString();
 						String componenteX = "";
 						String componenteY = "";
 						for(int j = 1; j < aux[0].length(); j++) {
@@ -145,15 +154,27 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 						vector.put(Double.parseDouble(componenteY));
 						data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
 					}
+					else {
+						JSONArray vector = new JSONArray();
+						vector.put(Double.parseDouble("1e10"));
+						vector.put(Double.parseDouble("1.4e10"));
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
+					}
 				}
 				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'g') {
 					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
 						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
 					}
+					else {
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), "9.81");
+					}
 				}
 				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'G') {
 					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
 						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
+					}
+					else {
+						data.put(_dataTableModel.getValueAt(i, 0).toString(), "6.67e-11");
 					}
 				}
 				else {
@@ -174,11 +195,8 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	public boolean open() {
 		
-	if (_groupsModel.getSize() == 0) //Es necesario comentarlo pq al ppio siempre pasa pq no estamos metiendo nada y nunca se pone set visible
-		//return _status;// no se que pollas hace
-	// TODO Establecer la posición de la ventana de diálogo de tal manera que se
-	// abra en el centro de la ventana principal
-		//add(this,BorderLayout.CENTER);//TODO tengo dudas
+	if (_groupsModel.getSize() == 0) 
+
 		pack();
 		_status=true;
 		setVisible(true);
@@ -192,29 +210,20 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	public void onReset(Map<String, BodiesGroup> groups, double time, double dt) {
 		_comboGroups.removeAll();
 	}
-	@Override //TODO seguir por aquí
-	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {//TODO no se que hace asi q ns si hay q hacer algo aqui
-		//_groupsModel = new DefaultComboBoxModel<>();
+	@Override 
+	public void onRegister(Map<String, BodiesGroup> groups, double time, double dt) {
 		_groupsModel = new DefaultComboBoxModel<>();
 		_groupsInfo = new ArrayList<BodiesGroup>();
 		_comboGroups= new JComboBox<String> (_groupsModel);		
 		for(BodiesGroup b: groups.values()) {
-			//_groupsModel.addElement(b.getId());
-			//_comboLaws.addItem(b.getId());;
 			_comboGroups.addItem(b.getId());
 			_groupsInfo.add(b);
-		}
-		
-			
-		//mainPanel.add(_comboGroups);
+		}		
 	}
 	@Override
 	public void onGroupAdded(Map<String, BodiesGroup> groups, BodiesGroup g) {
 		_groupsInfo.add(g);
-		_groupsModel.addElement(g.getId());
-		
-		//TODO ahora para que se actualice en la combobox no se si borrarla y volver a crear otra o q
-		
+		_groupsModel.addElement(g.getId());		
 	}
 	@Override
 	public void onBodyAdded(Map<String, BodiesGroup> groups, Body b) {

@@ -10,7 +10,7 @@ import simulator.model.NewtonUniversalGravitation;
 public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws> {
 
 	private static final double g = 9.81;
-	private static final Vector2D c = new Vector2D(1.e10, 1.4e10);
+	private static final Vector2D c = new Vector2D();
 	
 	public MovingTowardsFixedPointBuilder() {
 		super("mtfp", "Moving towards a fixed point");

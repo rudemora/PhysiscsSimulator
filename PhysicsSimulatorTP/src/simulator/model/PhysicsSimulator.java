@@ -94,10 +94,10 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		return getState().toString();
 	}
 	
-	public void reset() { //TODO dice en el enunciado con el metodo clear??
+	public void reset() { 
 		map.clear();
 		idList.clear();
-		actualTime = 0; //TODO he puesto los dos a 0 pero no se si solo hay que poner este
+		actualTime = 0; 
 		for(SimulatorObserver s:listObserver) {
 			s.onReset(mapRO, actualTime, dt);
 		}

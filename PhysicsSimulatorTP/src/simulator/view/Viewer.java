@@ -65,19 +65,11 @@ class Viewer extends SimulationViewer {
 
 	private void initGUI() {
 
-		// add a border
 		setBorder(BorderFactory.createLineBorder(Color.black, 2));
-
-		// initialize the color generator, and the map, that we use
-		// assign colors to groups
 		_colorGen = new ColorsGenerator();
 		_gColor = new HashMap<>();
-
-		// initialize the lists of bodies and groups
 		_bodies = new ArrayList<>();
 		_groups = new ArrayList<>();
-
-		// The preferred and minimum size of the components
 		setMinimumSize(new Dimension(_WIDTH, _HEIGHT));
 		setPreferredSize(new Dimension(_WIDTH, _HEIGHT));
 		// add a key listener to handle the user actions
@@ -264,7 +256,7 @@ class Viewer extends SimulationViewer {
 		g.drawString("Scaling ratio: " + _scale, 10, 60); 
 		g.setColor(Color.BLUE);
 		if (_selectedGroup == null) {
-			g.drawString("Selected group: all", 10, 75); //TODO un poco feo el if
+			g.drawString("Selected group: all", 10, 75); 
 		}
 		else {
 			g.drawString("Selected group: " + _selectedGroup, 10, 75); 
