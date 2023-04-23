@@ -136,6 +136,7 @@ public class PhysicsSimulator implements Observable<SimulatorObserver>{
 		for(SimulatorObserver s: listObserver) {
 			if (s.equals(o)) {
 				listObserver.remove(o);
+				break;
 			}
 		}
 	}
