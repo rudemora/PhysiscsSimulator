@@ -214,7 +214,7 @@ public class Main {
 		if (s == null) {
 			_mode = _modeDefaultValue;
 		}
-		else if (s == "gui" || s=="batch") {
+		else if (s.equals("gui") || s.equals("batch")) {
 			_mode = s;
 		}
 		else {
@@ -304,7 +304,7 @@ public class Main {
 	
 	private static void start(String[] args) throws Exception {
 		parseArgs(args);
-		if (_mode == _modeDefaultValue) {
+		if (_mode.equals(_modeDefaultValue)) {
 			startGUIMode();
 		}
 		else {

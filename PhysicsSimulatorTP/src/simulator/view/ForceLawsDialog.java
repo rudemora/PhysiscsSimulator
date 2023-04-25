@@ -136,56 +136,10 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	}
 	private void ok() {
 		try {
-			JSONObject data=new JSONObject();
-			for(int i=0;i<_dataTableModel.getRowCount();i++) {
-				if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'c') {
-					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
-						String[] aux = _dataTableModel.getValueAt(i,1).toString().split(",");
-						String componenteX = "";
-						String componenteY = "";
-						for(int j = 1; j < aux[0].length(); j++) {
-							componenteX += aux[0].charAt(j);
-						}
-						for(int j = 0; j < aux[1].length() - 1; j++) {
-							componenteY += aux[1].charAt(j);
-						}
-						JSONArray vector = new JSONArray();
-						vector.put(Double.parseDouble(componenteX));
-						vector.put(Double.parseDouble(componenteY));
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
-					}
-					else {
-						JSONArray vector = new JSONArray();
-						vector.put(Double.parseDouble("1e10"));
-						vector.put(Double.parseDouble("1.4e10"));
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), vector);
-					}
-				}
-				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'g') {
-					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
-					}
-					else {
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), "9.81");
-					}
-				}
-				else if (_dataTableModel.getValueAt(i, 0).toString().charAt(0) == 'G') {
-					if (!_dataTableModel.getValueAt(i,1).toString().isBlank()) {
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
-					}
-					else {
-						data.put(_dataTableModel.getValueAt(i, 0).toString(), "6.67e-11");
-					}
-				}
-				else {
-					data.put(_dataTableModel.getValueAt(i, 0).toString(), _dataTableModel.getValueAt(i, 1).toString());
-				}
-		    }
-			JSONObject type= new JSONObject();
-			type.put("data", data);
-			type.put("type", _forceLawsInfo.get(_selectedLawsIndex).getString("type"));
+			JSONObject fl = new JSONObject("{\"type\":" + _forceLawsInfo.get(_selectedLawsIndex).getString("type")
+					+ ", \"data\":" + getJSON() + "}");
 			_groupsInfo.get(_comboGroups.getSelectedIndex()).getId();
-			_ctrl.setForceLaws(_groupsInfo.get(_comboGroups.getSelectedIndex()).getId(), type);
+			_ctrl.setForceLaws(_groupsInfo.get(_comboGroups.getSelectedIndex()).getId(), fl);
 			_status=true;
 			setVisible(false);
 		}catch(Exception e) {
@@ -236,5 +190,28 @@ class ForceLawsDialog extends JDialog implements SimulatorObserver {
 	@Override
 	public void onForceLawsChanged(BodiesGroup g) {
 		
+	}
+	
+	private String getJSON() {
+		StringBuilder s = new StringBuilder();
+		s.append('{');
+		for (int i = 0; i < _dataTableModel.getRowCount(); i++) {
+			String k = _dataTableModel.getValueAt(i, 0).toString();
+			String v = _dataTableModel.getValueAt(i, 1).toString();
+			if (!v.isEmpty()) {
+				s.append('"');
+				s.append(k);
+				s.append('"');
+				s.append(':');
+				s.append(v);
+				s.append(',');
+			}
+		}
+
+		if (s.length() > 1)
+			s.deleteCharAt(s.length() - 1);
+		s.append('}');
+
+		return s.toString();
 	}
 }

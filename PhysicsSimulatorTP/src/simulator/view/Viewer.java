@@ -281,13 +281,13 @@ class Viewer extends SimulationViewer {
 			if (isVisible(b)) {
 				g.setColor(_gColor.get(b.getgId()));
 				int componenteX = (int) (_centerX + b.getPosition().getX()/_scale);
-				int componenteY = (int) (_centerY + b.getPosition().getY()/_scale);
+				int componenteY = (int) (_centerY - b.getPosition().getY()/_scale);
 				g.fillOval(componenteX, componenteY, 10, 10);
 				g.setColor(Color.BLACK);
 				g.drawString(b.getId(), componenteX, componenteY - 5);
 				if (_showVectors) {
-					drawLineWithArrow(g, componenteX + 5, componenteY + 5, componenteX + (int) b.getVelocity().direction().scale(40).getX(), componenteY + (int) b.getVelocity().direction().scale(40).getY(), 5, 5, Color.GREEN, Color.GREEN );
-					drawLineWithArrow(g, componenteX + 5, componenteY + 5,componenteX + (int) b.getForce().direction().scale(40).getX(), componenteY + (int) b.getForce().direction().scale(40).getY(), 5, 5, Color.RED, Color.RED );
+					drawLineWithArrow(g, componenteX + 5, componenteY - 5, componenteX + (int) b.getVelocity().direction().scale(40).getX(), componenteY - (int) b.getVelocity().direction().scale(40).getY(), 5, 5, Color.GREEN, Color.GREEN );
+					drawLineWithArrow(g, componenteX + 5, componenteY - 5,componenteX + (int) b.getForce().direction().scale(40).getX(), componenteY - (int) b.getForce().direction().scale(40).getY(), 5, 5, Color.RED, Color.RED );
 				}
 			}
 		}

@@ -36,7 +36,7 @@ class ViewerWindow extends JFrame implements SimulatorObserver {
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				_ctrl.removeObserver((SimulatorObserver) e.getWindow());
+				_ctrl.removeObserver(ViewerWindow.this);
 			}
 			
 			@Override
